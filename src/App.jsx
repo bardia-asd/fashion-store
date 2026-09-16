@@ -1,46 +1,86 @@
-import { Grid2X2, Heart, List } from "lucide-react";
-import { Toggle } from "./components/ui/toggle";
-import { ToggleGroup, ToggleGroupItem } from "./components/ui/toggle-group";
-import { Switch } from "./components/ui/switch";
-import { Label } from "./components/ui/label";
-import { Slider } from "./components/ui/slider";
+import {
+    Drawer,
+    DrawerClose,
+    DrawerContent,
+    DrawerDescription,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger,
+} from "@/components/ui/drawer";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 const App = () => {
     return (
         <div className="flex flex-col gap-4 p-5 max-w-sm">
-            <Toggle
-                aria-label="افزودن به علاقه‌مندی‌ها"
-                variant="outline"
-                className="size-9">
-                <Heart />
-            </Toggle>
+            <Drawer swipeDirection="left">
+                <DrawerTrigger render={<Button />}>سبد خرید</DrawerTrigger>
 
-            <ToggleGroup type="multiple">
-                <ToggleGroupItem value="small">S</ToggleGroupItem>
-                <ToggleGroupItem value="medium">M</ToggleGroupItem>
-                <ToggleGroupItem value="large">L</ToggleGroupItem>
-            </ToggleGroup>
+                <DrawerContent>
+                    <DrawerHeader>
+                        <DrawerTitle>سبد خرید</DrawerTitle>
 
-            <div className="flex items-center justify-end gap-3" dir="ltr">
-                <Label htmlFor="stock">فقط محصولات موجود</Label>
-                <Switch id="stock" />
-            </div>
+                        <DrawerDescription>
+                            محصولات انتخاب‌شده شما
+                        </DrawerDescription>
+                    </DrawerHeader>
 
-            <div className="space-y-4" dir="ltr">
-                <Label dir="rtl">محدوده قیمت</Label>
+                    <div className="flex-1 space-y-4 overflow-y-auto p-4">
+                        <div className="flex justify-between border-b pb-4">
+                            <div>
+                                <p className="font-medium">پیراهن لینن</p>
+                                <p className="text-sm text-muted-foreground">
+                                    ۱ × ۱,۵۰۰,۰۰۰ تومان
+                                </p>
+                            </div>
 
-                <Slider
-                    defaultValue={[500000, 5000000]}
-                    min={0}
-                    max={10000000}
-                    step={100000}
-                />
+                            <span>۱,۵۰۰,۰۰۰ تومان</span>
+                        </div>
+                    </div>
 
-                <div className="flex justify-between text-sm text-muted-foreground">
-                    <span>ارزان‌ترین</span>
-                    <span>گران‌ترین</span>
-                </div>
-            </div>
+                    <DrawerFooter>
+                        <div className="flex justify-between">
+                            <span>مجموع</span>
+                            <span className="font-semibold">
+                                ۱,۵۰۰,۰۰۰ تومان
+                            </span>
+                        </div>
+
+                        <Button>ادامه پرداخت</Button>
+                    </DrawerFooter>
+                </DrawerContent>
+            </Drawer>
+
+            <Dialog>
+                <DialogTrigger render={<Button variant="destructive" />}>
+                    حذف محصول
+                </DialogTrigger>
+
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>حذف محصول؟</DialogTitle>
+
+                        <DialogDescription>
+                            آیا مطمئن هستید که می‌خواهید این محصول را حذف کنید؟
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    <DialogFooter>
+                        <Button variant="destructive">حذف</Button>
+
+                        <Button variant="outline">انصراف</Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 };

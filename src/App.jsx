@@ -1,69 +1,88 @@
-import { AspectRatio } from "./components/ui/aspect-ratio";
-import { Badge } from "./components/ui/badge";
-import { Button } from "./components/ui/button";
-import { Card, CardContent, CardFooter } from "./components/ui/card";
-import { Skeleton } from "./components/ui/skeleton";
+import { Checkbox } from "./components/ui/checkbox";
+import {
+    Field,
+    FieldDescription,
+    FieldError,
+    FieldLabel,
+} from "./components/ui/field";
+import { Input } from "./components/ui/input";
+import {
+    InputOTP,
+    InputOTPGroup,
+    InputOTPSlot,
+} from "./components/ui/input-otp";
+import { Label } from "./components/ui/label";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "./components/ui/select";
+import { Textarea } from "./components/ui/textarea";
 
 const App = () => {
     return (
         <div className="flex flex-col gap-4 p-5">
-            <Card className="overflow-hidden max-w-lg">
-                <div className="relative">
-                    <img
-                        src="https://plus.unsplash.com/premium_photo-1784699324917-98ae0a1bd251?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="پیراهن لینن"
-                        className="w-full object-cover"
-                    />
+            <Field className="max-w-sm">
+                <FieldLabel htmlFor="email">ایمیل</FieldLabel>
 
-                    <Badge className="absolute right-3 top-3">جدید</Badge>
-                </div>
-
-                <CardContent className="space-y-2 p-4">
-                    <p className="text-sm text-muted-foreground">
-                        پیراهن مردانه
-                    </p>
-
-                    <h3 className="font-medium">پیراهن لینن کلاسیک</h3>
-
-                    <p className="font-semibold">۱,۸۹۰,۰۰۰ تومان</p>
-                </CardContent>
-
-                <CardFooter className="p-4 pt-0">
-                    <Button className="w-full">افزودن به سبد</Button>
-                </CardFooter>
-            </Card>
-
-            <div className="flex gap-2">
-                <Badge>جدید</Badge>
-
-                <Badge variant="secondary">پرفروش</Badge>
-
-                <Badge variant="outline">موجود</Badge>
-
-                <Badge variant="destructive">ناموجود</Badge>
-
-                <Badge className="bg-success text-white">۲۰٪ تخفیف</Badge>
-            </div>
-
-            <div className="space-y-4 max-w-lg">
-                <Skeleton className="aspect-square w-full" />
-
-                <div className="space-y-2">
-                    <Skeleton className="h-4 w-1/3" />
-                    <Skeleton className="h-5 w-3/4" />
-                    <Skeleton className="h-5 w-1/2" />
-                </div>
-
-                <Skeleton className="h-10 w-full" />
-            </div>
-
-            <AspectRatio ratio={3 / 4}>
-                <img
-                    src="https://plus.unsplash.com/premium_photo-1784699324917-98ae0a1bd251?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    alt="پیراهن لینن"
-                    className="h-full w-full object-cover"
+                <Input
+                    id="email"
+                    type="email"
+                    placeholder="example@email.com"
                 />
-            </AspectRatio>
+
+                <FieldDescription>
+                    ایمیل شما برای ارسال سفارش استفاده می‌شود.
+                </FieldDescription>
+
+                <FieldError>ایمیل وارد شده معتبر نیست.</FieldError>
+            </Field>
+
+            <div className="flex items-center gap-2">
+                <Checkbox id="terms" />
+
+                <Label htmlFor="terms">قوانین و شرایط را می‌پذیرم</Label>
+            </div>
+
+            <Select>
+                <SelectTrigger className="w-[200px]" dir="rtl">
+                    <SelectValue placeholder="انتخاب دسته‌بندی" />
+                </SelectTrigger>
+
+                <SelectContent>
+                    <SelectItem value="shirts">پیراهن</SelectItem>
+                    <SelectItem value="pants">شلوار</SelectItem>
+                    <SelectItem value="shoes">کفش</SelectItem>
+                    <SelectItem value="accessories">اکسسوری</SelectItem>
+                </SelectContent>
+            </Select>
+
+            <div className="grid gap-2 max-w-sm">
+                <Label htmlFor="address">آدرس</Label>
+
+                <Textarea
+                    id="address"
+                    placeholder="آدرس کامل خود را وارد کنید..."
+                    dir="rtl"
+                />
+            </div>
+
+            <div className="grid gap-3 max-w-sm">
+                <p className="text-sm font-medium">کد تأیید را وارد کنید</p>
+
+                <InputOTP maxLength={6} dir="ltr">
+                    <InputOTPGroup className="flex-row-reverse gap-2">
+                        <InputOTPSlot index={0} className="rounded-lg size-9"/>
+                        <InputOTPSlot index={1} className="rounded-lg size-9"/>
+                        <InputOTPSlot index={2} className="rounded-lg size-9"/>
+                        <InputOTPSlot index={3} className="rounded-lg size-9"/>
+                        <InputOTPSlot index={4} className="rounded-lg size-9"/>
+                        <InputOTPSlot index={5} className="rounded-lg size-9"/>
+                    </InputOTPGroup>
+                </InputOTP>
+            </div>
         </div>
     );
 };

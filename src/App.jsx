@@ -1,137 +1,46 @@
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from "./components/ui/accordion";
-import { Button } from "./components/ui/button";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuGroup,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/ui/tabs";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "./components/ui/breadcrumb";
+import { Grid2X2, Heart, List } from "lucide-react";
+import { Toggle } from "./components/ui/toggle";
+import { ToggleGroup, ToggleGroupItem } from "./components/ui/toggle-group";
+import { Switch } from "./components/ui/switch";
+import { Label } from "./components/ui/label";
+import { Slider } from "./components/ui/slider";
 
 const App = () => {
     return (
         <div className="flex flex-col gap-4 p-5 max-w-sm">
-            <Tabs defaultValue="description" className="w-full">
-                <TabsList>
-                    <TabsTrigger value="description">توضیحات</TabsTrigger>
-                    <TabsTrigger value="specifications">مشخصات</TabsTrigger>
-                    <TabsTrigger value="reviews">نظرات</TabsTrigger>
-                </TabsList>
+            <Toggle
+                aria-label="افزودن به علاقه‌مندی‌ها"
+                variant="outline"
+                className="size-9">
+                <Heart />
+            </Toggle>
 
-                <TabsContent value="description">
-                    <p className="text-muted-foreground">
-                        این محصول از پارچه باکیفیت و مناسب استفاده روزمره تولید
-                        شده است.
-                    </p>
-                </TabsContent>
+            <ToggleGroup type="multiple">
+                <ToggleGroupItem value="small">S</ToggleGroupItem>
+                <ToggleGroupItem value="medium">M</ToggleGroupItem>
+                <ToggleGroupItem value="large">L</ToggleGroupItem>
+            </ToggleGroup>
 
-                <TabsContent value="specifications">
-                    <div className="space-y-2">
-                        <p>جنس: کتان</p>
-                        <p>رنگ: سفید</p>
-                        <p>سایز: S تا XL</p>
-                    </div>
-                </TabsContent>
+            <div className="flex items-center justify-end gap-3" dir="ltr">
+                <Label htmlFor="stock">فقط محصولات موجود</Label>
+                <Switch id="stock" />
+            </div>
 
-                <TabsContent value="reviews">
-                    <p className="text-muted-foreground">
-                        هنوز نظری ثبت نشده است.
-                    </p>
-                </TabsContent>
-            </Tabs>
+            <div className="space-y-4" dir="ltr">
+                <Label dir="rtl">محدوده قیمت</Label>
 
-            <Accordion type="single" className="max-w-sm">
-                <AccordionItem value="shipping">
-                    <AccordionTrigger>
-                        زمان ارسال سفارش چقدر است؟
-                    </AccordionTrigger>
+                <Slider
+                    defaultValue={[500000, 5000000]}
+                    min={0}
+                    max={10000000}
+                    step={100000}
+                />
 
-                    <AccordionContent>
-                        سفارش شما معمولاً بین ۲ تا ۴ روز کاری ارسال می‌شود.
-                    </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="return">
-                    <AccordionTrigger>
-                        آیا امکان مرجوع کردن کالا وجود دارد؟
-                    </AccordionTrigger>
-
-                    <AccordionContent>
-                        بله، تا ۷ روز پس از دریافت سفارش امکان بازگشت وجود دارد.
-                    </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="payment">
-                    <AccordionTrigger>
-                        چه روش‌هایی برای پرداخت وجود دارد؟
-                    </AccordionTrigger>
-
-                    <AccordionContent>
-                        پرداخت آنلاین از طریق درگاه بانکی امکان‌پذیر است.
-                    </AccordionContent>
-                </AccordionItem>
-            </Accordion>
-
-            <DropdownMenu>
-                <DropdownMenuTrigger render={<Button variant="outline" />}>
-                    حساب کاربری
-                </DropdownMenuTrigger>
-
-                <DropdownMenuContent align="end">
-                    <DropdownMenuGroup>
-                        <DropdownMenuLabel>حساب من</DropdownMenuLabel>
-
-                        <DropdownMenuItem>پروفایل</DropdownMenuItem>
-
-                        <DropdownMenuItem>سفارش‌های من</DropdownMenuItem>
-
-                        <DropdownMenuItem>علاقه‌مندی‌ها</DropdownMenuItem>
-                    </DropdownMenuGroup>
-
-                    <DropdownMenuSeparator />
-
-                    <DropdownMenuItem>خروج</DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
-
-            <Breadcrumb>
-                <BreadcrumbList>
-                    <BreadcrumbItem>
-                        <BreadcrumbLink href="/">خانه</BreadcrumbLink>
-                    </BreadcrumbItem>
-
-                    <BreadcrumbSeparator />
-
-                    <BreadcrumbItem>
-                        <BreadcrumbLink href="/products">
-                            محصولات
-                        </BreadcrumbLink>
-                    </BreadcrumbItem>
-
-                    <BreadcrumbSeparator />
-
-                    <BreadcrumbItem>
-                        <BreadcrumbLink href="/products/shirts">
-                            پیراهن
-                        </BreadcrumbLink>
-                    </BreadcrumbItem>
-
-                    <BreadcrumbSeparator />
-
-                    <BreadcrumbItem>
-                        <BreadcrumbPage>پیراهن لینن</BreadcrumbPage>
-                    </BreadcrumbItem>
-                </BreadcrumbList>
-            </Breadcrumb>
+                <div className="flex justify-between text-sm text-muted-foreground">
+                    <span>ارزان‌ترین</span>
+                    <span>گران‌ترین</span>
+                </div>
+            </div>
         </div>
     );
 };

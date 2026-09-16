@@ -1,88 +1,137 @@
-import { Checkbox } from "./components/ui/checkbox";
 import {
-    Field,
-    FieldDescription,
-    FieldError,
-    FieldLabel,
-} from "./components/ui/field";
-import { Input } from "./components/ui/input";
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "./components/ui/accordion";
+import { Button } from "./components/ui/button";
 import {
-    InputOTP,
-    InputOTPGroup,
-    InputOTPSlot,
-} from "./components/ui/input-otp";
-import { Label } from "./components/ui/label";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "./components/ui/select";
-import { Textarea } from "./components/ui/textarea";
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/ui/tabs";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "./components/ui/breadcrumb";
 
 const App = () => {
     return (
-        <div className="flex flex-col gap-4 p-5">
-            <Field className="max-w-sm">
-                <FieldLabel htmlFor="email">ایمیل</FieldLabel>
+        <div className="flex flex-col gap-4 p-5 max-w-sm">
+            <Tabs defaultValue="description" className="w-full">
+                <TabsList>
+                    <TabsTrigger value="description">توضیحات</TabsTrigger>
+                    <TabsTrigger value="specifications">مشخصات</TabsTrigger>
+                    <TabsTrigger value="reviews">نظرات</TabsTrigger>
+                </TabsList>
 
-                <Input
-                    id="email"
-                    type="email"
-                    placeholder="example@email.com"
-                />
+                <TabsContent value="description">
+                    <p className="text-muted-foreground">
+                        این محصول از پارچه باکیفیت و مناسب استفاده روزمره تولید
+                        شده است.
+                    </p>
+                </TabsContent>
 
-                <FieldDescription>
-                    ایمیل شما برای ارسال سفارش استفاده می‌شود.
-                </FieldDescription>
+                <TabsContent value="specifications">
+                    <div className="space-y-2">
+                        <p>جنس: کتان</p>
+                        <p>رنگ: سفید</p>
+                        <p>سایز: S تا XL</p>
+                    </div>
+                </TabsContent>
 
-                <FieldError>ایمیل وارد شده معتبر نیست.</FieldError>
-            </Field>
+                <TabsContent value="reviews">
+                    <p className="text-muted-foreground">
+                        هنوز نظری ثبت نشده است.
+                    </p>
+                </TabsContent>
+            </Tabs>
 
-            <div className="flex items-center gap-2">
-                <Checkbox id="terms" />
+            <Accordion type="single" className="max-w-sm">
+                <AccordionItem value="shipping">
+                    <AccordionTrigger>
+                        زمان ارسال سفارش چقدر است؟
+                    </AccordionTrigger>
 
-                <Label htmlFor="terms">قوانین و شرایط را می‌پذیرم</Label>
-            </div>
+                    <AccordionContent>
+                        سفارش شما معمولاً بین ۲ تا ۴ روز کاری ارسال می‌شود.
+                    </AccordionContent>
+                </AccordionItem>
 
-            <Select>
-                <SelectTrigger className="w-[200px]" dir="rtl">
-                    <SelectValue placeholder="انتخاب دسته‌بندی" />
-                </SelectTrigger>
+                <AccordionItem value="return">
+                    <AccordionTrigger>
+                        آیا امکان مرجوع کردن کالا وجود دارد؟
+                    </AccordionTrigger>
 
-                <SelectContent>
-                    <SelectItem value="shirts">پیراهن</SelectItem>
-                    <SelectItem value="pants">شلوار</SelectItem>
-                    <SelectItem value="shoes">کفش</SelectItem>
-                    <SelectItem value="accessories">اکسسوری</SelectItem>
-                </SelectContent>
-            </Select>
+                    <AccordionContent>
+                        بله، تا ۷ روز پس از دریافت سفارش امکان بازگشت وجود دارد.
+                    </AccordionContent>
+                </AccordionItem>
 
-            <div className="grid gap-2 max-w-sm">
-                <Label htmlFor="address">آدرس</Label>
+                <AccordionItem value="payment">
+                    <AccordionTrigger>
+                        چه روش‌هایی برای پرداخت وجود دارد؟
+                    </AccordionTrigger>
 
-                <Textarea
-                    id="address"
-                    placeholder="آدرس کامل خود را وارد کنید..."
-                    dir="rtl"
-                />
-            </div>
+                    <AccordionContent>
+                        پرداخت آنلاین از طریق درگاه بانکی امکان‌پذیر است.
+                    </AccordionContent>
+                </AccordionItem>
+            </Accordion>
 
-            <div className="grid gap-3 max-w-sm">
-                <p className="text-sm font-medium">کد تأیید را وارد کنید</p>
+            <DropdownMenu>
+                <DropdownMenuTrigger render={<Button variant="outline" />}>
+                    حساب کاربری
+                </DropdownMenuTrigger>
 
-                <InputOTP maxLength={6} dir="ltr">
-                    <InputOTPGroup className="flex-row-reverse gap-2">
-                        <InputOTPSlot index={0} className="rounded-lg size-9"/>
-                        <InputOTPSlot index={1} className="rounded-lg size-9"/>
-                        <InputOTPSlot index={2} className="rounded-lg size-9"/>
-                        <InputOTPSlot index={3} className="rounded-lg size-9"/>
-                        <InputOTPSlot index={4} className="rounded-lg size-9"/>
-                        <InputOTPSlot index={5} className="rounded-lg size-9"/>
-                    </InputOTPGroup>
-                </InputOTP>
-            </div>
+                <DropdownMenuContent align="end">
+                    <DropdownMenuGroup>
+                        <DropdownMenuLabel>حساب من</DropdownMenuLabel>
+
+                        <DropdownMenuItem>پروفایل</DropdownMenuItem>
+
+                        <DropdownMenuItem>سفارش‌های من</DropdownMenuItem>
+
+                        <DropdownMenuItem>علاقه‌مندی‌ها</DropdownMenuItem>
+                    </DropdownMenuGroup>
+
+                    <DropdownMenuSeparator />
+
+                    <DropdownMenuItem>خروج</DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+
+            <Breadcrumb>
+                <BreadcrumbList>
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href="/">خانه</BreadcrumbLink>
+                    </BreadcrumbItem>
+
+                    <BreadcrumbSeparator />
+
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href="/products">
+                            محصولات
+                        </BreadcrumbLink>
+                    </BreadcrumbItem>
+
+                    <BreadcrumbSeparator />
+
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href="/products/shirts">
+                            پیراهن
+                        </BreadcrumbLink>
+                    </BreadcrumbItem>
+
+                    <BreadcrumbSeparator />
+
+                    <BreadcrumbItem>
+                        <BreadcrumbPage>پیراهن لینن</BreadcrumbPage>
+                    </BreadcrumbItem>
+                </BreadcrumbList>
+            </Breadcrumb>
         </div>
     );
 };

@@ -3,27 +3,27 @@ import { Home, Heart, ShoppingBag, User } from "lucide-react";
 export const navItems = [
     {
         label: "مردانه",
-        href: "/products",
+        href: "/products?category=men",
     },
     {
         label: "زنانه",
-        href: "/products",
+        href: "/products?category=women",
     },
     {
         label: "جدیدها",
-        href: "/products",
+        href: "/products?category=new-arrivals",
     },
     {
         label: "کالکشن‌ها",
-        href: "/products",
+        href: "/products?category=collections",
     },
     {
         label: "حراج",
-        href: "/products",
+        href: "/products?category=sale",
     },
     {
         label: "اکسسوری",
-        href: "/products",
+        href: "/products?category=accessories",
     },
 ];
 

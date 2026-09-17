@@ -6,21 +6,22 @@ import { Button } from "@/components/ui/button";
 
 import MobileMenu from "./MobileMenu";
 import CartDrawer from "./cart";
+import AccountMenu from "./AccountMenu";
+import SearchOverlay from "./search/SearchOverlay";
 
 import { navItems } from "@/data/navData";
-import AccountMenu from "./AccountMenu";
 
 const Header = () => {
     // Controls whether the mobile navigation is open
     const [isMobileOpen, setIsMobileOpen] = useState(false);
 
     // Gets the current URL path
-    const { pathname } = useLocation();
+    const { pathname, search } = useLocation();
 
     // Closes the mobile menu whenever the route changes
     useEffect(() => {
         setIsMobileOpen(false);
-    }, [pathname]);
+    }, [pathname, search]);
 
     return (
         // Sticky header that stays at the top while scrolling
@@ -53,13 +54,7 @@ const Header = () => {
                     {/* Header action buttons */}
                     <div className="flex gap-1">
                         {/* Search */}
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            aria-label="جستجو"
-                            className="size-8.5 [&_svg:not([class*='size-'])]:size-4.5">
-                            <Search />
-                        </Button>
+                        <SearchOverlay />
 
                         {/* Account */}
                         <AccountMenu />

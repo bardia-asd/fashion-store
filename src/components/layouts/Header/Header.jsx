@@ -8,6 +8,7 @@ import MobileMenu from "./MobileMenu";
 import CartDrawer from "./cart";
 
 import { navItems } from "@/data/navData";
+import AccountMenu from "./AccountMenu";
 
 const Header = () => {
     // Controls whether the mobile navigation is open
@@ -61,13 +62,7 @@ const Header = () => {
                         </Button>
 
                         {/* Account */}
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            aria-label="حساب کاربری"
-                            className="hidden md:inline-flex size-8.5 [&_svg:not([class*='size-'])]:size-4.5">
-                            <User />
-                        </Button>
+                        <AccountMenu />
 
                         {/* Wishlist */}
                         <Button

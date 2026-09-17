@@ -1,5 +1,6 @@
 import { Outlet } from "react-router";
 import Header from "../Header";
+import BottomNavigation from "../BottomNavigation";
 
 const RootLayout = () => {
     return (
@@ -9,6 +10,8 @@ const RootLayout = () => {
             <main className="flex-1">
                 <Outlet />
             </main>
+
+            <BottomNavigation />
         </div>
     );
 };

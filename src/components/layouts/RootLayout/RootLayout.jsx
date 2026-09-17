@@ -5,7 +5,7 @@ import Footer from "../Footer";
 
 const RootLayout = () => {
     return (
-        <div className="flex flex-col min-h-dvh pb-14 md:pb-0">
+        <div className="flex flex-col min-h-dvh pb-14 md:pb-0 scrollbar-thin">
             <Header />
 
             <main className="flex-1">

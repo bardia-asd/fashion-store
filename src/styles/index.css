@@ -140,6 +140,25 @@
     padding-inline: 1.25rem;
 }
 
+@utility scrollbar-thin {
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: var(--color-border) transparent;
+
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: var(--color-border);
+        border-radius: 9999px;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+        background-color: var(--color-muted-foreground);
+    }
+}
+
 @variant lg {
     .container-app {
         padding-inline: 2.5rem;

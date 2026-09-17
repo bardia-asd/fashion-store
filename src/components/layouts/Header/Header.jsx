@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router";
-import { Heart, Menu, Search, ShoppingBag, User, XIcon } from "lucide-react";
+import { Heart, Menu, Search, User, XIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
 import MobileMenu from "./MobileMenu";
+import CartDrawer from "./cart";
 
 import { navItems } from "@/data/navData";
-import { formatPersianNumber } from "@/utils/formatter";
 
 const Header = () => {
     // Controls whether the mobile navigation is open
@@ -78,21 +78,8 @@ const Header = () => {
                             <Heart />
                         </Button>
 
-                        {/* Shopping cart with item count */}
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            aria-label={`سبد خرید، ${formatPersianNumber(5)} کالا`}
-                            className="relative size-8.5 [&_svg:not([class*='size-'])]:size-4.5">
-                            <ShoppingBag />
-
-                            {/* Cart item count badge */}
-                            <span
-                                aria-hidden="true"
-                                className="absolute top-0 right-0 size-3 rounded-full bg-brand text-[10px] text-brand-foreground">
-                                {formatPersianNumber(5)}
-                            </span>
-                        </Button>
+                        {/* Shopping cart*/}
+                        <CartDrawer />
 
                         {/* Mobile menu toggle */}
                         <Button

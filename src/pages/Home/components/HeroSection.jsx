@@ -12,7 +12,7 @@ const HeroSection = () => {
                 <source srcSet={heroWomen} media="(width>=1024px)" />
                 <img
                     src={heroWomenMobile}
-                    alt=""
+                    alt="مجموعه جدید پوشاک زنانه"
                     loading="lazy"
                     className="size-full object-cover object-top"
                 />

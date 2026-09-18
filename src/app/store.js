@@ -1,7 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-
-const temporaryReducer = (state = {}) => state;
+import { categoriesApi } from "@/features/categories/categoriesApi";
 
 export const store = configureStore({
-    reducer: temporaryReducer,
+    reducer: {
+        [categoriesApi.reducerPath]: categoriesApi.reducer,
+    },
+
+    middleware: (getDefault) => getDefault().concat(categoriesApi.middleware),
 });

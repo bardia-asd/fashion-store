@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 const SectionHeader = ({ eyebrow, title, actions }) => {
     return (
         // Section header with title and optional actions
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-12">
             {/* Eyebrow and section title */}
             <div>
                 {/* Small label above the section title */}

@@ -1,4 +1,3 @@
-// src/services/supabase/supabaseBaseQuery.js
 import { supabase } from "./client";
 
 export const supabaseBaseQuery =
@@ -8,9 +7,23 @@ export const supabaseBaseQuery =
             let query = supabase.from(table);
 
             if (method === "select") {
-                const { data, error } = await query
+                let builder = query
                     .select(args.query ?? "*")
                     .match(args.match ?? {});
+
+                // ordering: { column: "created_at", ascending: false }
+                if (args.orderBy) {
+                    builder = builder.order(args.orderBy.column, {
+                        ascending: args.orderBy.ascending ?? true,
+                    });
+                }
+
+                // limit: 10
+                if (args.limit) {
+                    builder = builder.limit(args.limit);
+                }
+
+                const { data, error } = await builder;
                 if (error) throw error;
                 return { data };
             }

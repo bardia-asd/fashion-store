@@ -1,5 +1,6 @@
 import CategoriesSection from "./components/CategoriesSection";
 import HeroSection from "./components/HeroSection";
+import NewArrivalProducts from "./components/NewArrivalProducts";
 
 const Home = () => {
     return (
@@ -7,6 +8,8 @@ const Home = () => {
             <HeroSection />
 
             <CategoriesSection />
+
+            <NewArrivalProducts />
         </>
     );
 };

@@ -1,12 +1,8 @@
-import { supabaseBaseQuery } from "@/services/supabase/supabaseBaseQuery";
-import { createApi } from "@reduxjs/toolkit/query/react";
+import { supabaseApi } from "@/services/supabase/supabaseApi";
 
-const PRODUCT_SELECT = `*, product_images(*), product_variants(*, color:colors(*)), brand:brands(*), category:categories(*), reviews(rating)`;
+const PRODUCT_SELECT = `*, product_images(*), product_variants(*, color:colors(*)), brand:brands(*), category:categories(*)`;
 
-export const productsApi = createApi({
-    reducerPath: "productsApi",
-    baseQuery: supabaseBaseQuery(),
-    tagTypes: ["Products"],
+export const productsApi = supabaseApi.injectEndpoints({
     endpoints: (builder) => ({
         getNewProducts: builder.query({
             query: () => ({

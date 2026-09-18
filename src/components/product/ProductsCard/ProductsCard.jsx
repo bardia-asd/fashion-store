@@ -23,7 +23,7 @@ const ProductsCard = ({ product }) => {
         );
 
     // Calculate the total number of reviews
-    const reviewCount = product.reviews.length;
+    const reviewCount = product.reviews?.length;
 
     // Calculate the average product rating
     const rating =

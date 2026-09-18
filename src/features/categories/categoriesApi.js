@@ -1,10 +1,7 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
-import { supabaseBaseQuery } from "@/services/supabase/supabaseBaseQuery";
+// src/features/categories/categoriesApi.js
+import { supabaseApi } from "@/services/supabase/supabaseApi";
 
-export const categoriesApi = createApi({
-    reducerPath: "categoriesApi",
-    baseQuery: supabaseBaseQuery(),
-    tagTypes: ["Categories"],
+export const categoriesApi = supabaseApi.injectEndpoints({
     endpoints: (builder) => ({
         getCategories: builder.query({
             query: () => ({ table: "categories", method: "select" }),

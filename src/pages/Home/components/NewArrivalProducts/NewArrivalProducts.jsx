@@ -41,7 +41,7 @@ const NewArrivalProducts = () => {
                         ? Array.from({ length: 4 }).map((_, index) => (
                               <ProductCardSkeleton key={index} />
                           ))
-                        : products.map((product) => (
+                        : products?.map((product) => (
                               // Render each new arrival product
                               <ProductsCard
                                   key={product.id}

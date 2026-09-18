@@ -2,10 +2,7 @@ import { createBrowserRouter } from "react-router";
 
 import RootLayout from "@/components/layouts/RootLayout";
 
-import Home from "@/pages/Home";
-import Products from "@/pages/Products";
-import ProductDetail from "@/pages/ProductDetail";
-import Search from "@/pages/Search";
+import { Home, ProductDetail, Products, Search } from "@/pages";
 
 export const router = createBrowserRouter([
     {

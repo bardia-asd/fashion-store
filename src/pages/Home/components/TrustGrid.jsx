@@ -3,7 +3,7 @@ import { trustFeatures } from "@/data/trustData";
 const TrustGrid = () => {
     return (
         // Trust features section
-        <section className="py-20 lg:py-28">
+        <section className="py-20 lg:py-24">
             <div className="container-app">
                 {/* Responsive grid of store benefits */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-8">

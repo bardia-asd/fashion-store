@@ -4,6 +4,7 @@ import HeroSection from "./components/HeroSection";
 import LookBookSection from "./components/LookBookSection";
 import NewArrivalProducts from "./components/NewArrivalProducts";
 import PromoSection from "./components/PromoSection";
+import TestimonialSections from "./components/TestimonialSection";
 import TrendingProducts from "./components/TrendingProducts";
 import TrustGrid from "./components/TrustGrid";
 
@@ -25,6 +26,8 @@ const Home = () => {
             <BestSellerProducts />
 
             <TrustGrid />
+
+            <TestimonialSections />
         </>
     );
 };

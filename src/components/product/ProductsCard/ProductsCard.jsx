@@ -101,11 +101,12 @@ const ProductsCard = ({ product }) => {
                                 return (
                                     <Star
                                         key={star}
-                                        className={`size-3 ${
+                                        className={cn(
+                                            "size-3",
                                             isFilled
                                                 ? "text-yellow-500"
-                                                : "text-muted-foreground"
-                                        }`}
+                                                : "text-muted-foreground",
+                                        )}
                                         fill={
                                             isFilled ? "currentColor" : "none"
                                         }

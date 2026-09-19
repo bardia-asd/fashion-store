@@ -32,20 +32,20 @@ const BestSellerProducts = () => {
                     direction="row"
                     actions={
                         <>
-                            {/* Move the slider to the previous products */}
                             <Button
                                 size="icon"
                                 variant="outline"
-                                className="rounded-full bg-transparent! size-10 hover:text-primary-foreground"
+                                aria-label="محصولات قبلی"
+                                className="size-10 rounded-full bg-transparent! hover:text-primary-foreground"
                                 onClick={() => swiperRef.current?.slidePrev()}>
                                 <ChevronRight />
                             </Button>
 
-                            {/* Move the slider to the next products */}
                             <Button
                                 size="icon"
                                 variant="outline"
-                                className="rounded-full bg-transparent! size-10 hover:text-primary-foreground"
+                                aria-label="محصولات بعدی"
+                                className="size-10 rounded-full bg-transparent! hover:text-primary-foreground"
                                 onClick={() => swiperRef.current?.slideNext()}>
                                 <ChevronLeft />
                             </Button>

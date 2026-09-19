@@ -1,3 +1,4 @@
+import BestSellerProducts from "./components/BestSellerProducts";
 import CategoriesSection from "./components/CategoriesSection";
 import HeroSection from "./components/HeroSection";
 import LookBookSection from "./components/LookBookSection";
@@ -19,6 +20,8 @@ const Home = () => {
             <TrendingProducts />
 
             <LookBookSection />
+
+            <BestSellerProducts />
         </>
     );
 };

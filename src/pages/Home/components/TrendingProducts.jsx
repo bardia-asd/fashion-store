@@ -52,7 +52,8 @@ const TrendingProducts = () => {
 
                                 // Update the selected filter
                                 setFilter(value[0]);
-                            }}>
+                            }}
+                            className="flex-wrap">
                             {/* Render each available product filter */}
                             {productFilters.map((item) => (
                                 <ToggleGroupItem

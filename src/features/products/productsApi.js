@@ -29,8 +29,25 @@ export const productsApi = supabaseApi.injectEndpoints({
             }),
             providesTags: ["Products"],
         }),
+        getBestSellerProducts: builder.query({
+            query: () => ({
+                table: "products",
+                method: "select",
+                query: PRODUCT_SELECT,
+                filters: [
+                    { column: "is_active", operator: "eq", value: true },
+                    { column: "is_best_seller", operator: "eq", value: true },
+                ],
+                orderBy: { column: "created_at", ascending: false },
+                limit: 8,
+            }),
+            providesTags: ["Products"],
+        }),
     }),
 });
 
-export const { useGetNewProductsQuery, useGetTrendingProductsQuery } =
-    productsApi;
+export const {
+    useGetNewProductsQuery,
+    useGetTrendingProductsQuery,
+    useGetBestSellerProductsQuery,
+} = productsApi;

@@ -5,6 +5,7 @@ import LookBookSection from "./components/LookBookSection";
 import NewArrivalProducts from "./components/NewArrivalProducts";
 import PromoSection from "./components/PromoSection";
 import TrendingProducts from "./components/TrendingProducts";
+import TrustGrid from "./components/TrustGrid";
 
 const Home = () => {
     return (
@@ -22,6 +23,8 @@ const Home = () => {
             <LookBookSection />
 
             <BestSellerProducts />
+
+            <TrustGrid />
         </>
     );
 };

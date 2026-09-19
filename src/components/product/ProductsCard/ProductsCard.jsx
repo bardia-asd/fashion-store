@@ -39,7 +39,7 @@ const ProductsCard = ({ product }) => {
                 className="flex h-full flex-col">
                 {/* Product image and optional tag */}
                 <div className="relative overflow-hidden rounded-xl">
-                    <AspectRatio ratio={4 / 5}>
+                    <AspectRatio ratio={3 / 4}>
                         <img
                             src={thumbnail.url}
                             alt=""

@@ -2,6 +2,7 @@ import CategoriesSection from "./components/CategoriesSection";
 import HeroSection from "./components/HeroSection";
 import NewArrivalProducts from "./components/NewArrivalProducts";
 import PromoSection from "./components/PromoSection";
+import TrendingProducts from "./components/TrendingProducts";
 
 const Home = () => {
     return (
@@ -13,6 +14,8 @@ const Home = () => {
             <NewArrivalProducts />
 
             <PromoSection />
+
+            <TrendingProducts />
         </>
     );
 };

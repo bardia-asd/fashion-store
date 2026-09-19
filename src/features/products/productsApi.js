@@ -1,6 +1,6 @@
 import { supabaseApi } from "@/services/supabase/supabaseApi";
 
-const PRODUCT_SELECT = `*, product_images(*), product_variants(*, color:colors(*)), brand:brands(*), category:categories(*)`;
+const PRODUCT_SELECT = `*, product_images(*), product_variants(*, color:colors(*)), brand:brands(*), category:categories(*), reviews(rating)`;
 
 export const productsApi = supabaseApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -9,12 +9,28 @@ export const productsApi = supabaseApi.injectEndpoints({
                 table: "products",
                 method: "select",
                 query: PRODUCT_SELECT,
+                filters: [{ column: "is_active", operator: "eq", value: true }],
                 orderBy: { column: "created_at", ascending: false },
                 limit: 4,
+            }),
+            providesTags: ["Products"],
+        }),
+        getTrendingProducts: builder.query({
+            query: () => ({
+                table: "products",
+                method: "select",
+                query: PRODUCT_SELECT,
+                filters: [
+                    { column: "is_active", operator: "eq", value: true },
+                    { column: "is_trending", operator: "eq", value: true },
+                ],
+                orderBy: { column: "created_at", ascending: false },
+                limit: 8,
             }),
             providesTags: ["Products"],
         }),
     }),
 });
 
-export const { useGetNewProductsQuery } = productsApi;
+export const { useGetNewProductsQuery, useGetTrendingProductsQuery } =
+    productsApi;

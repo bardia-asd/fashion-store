@@ -3,11 +3,12 @@ import { ArrowLeft } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
-import SectionHeader from "../SectionHeader";
 import { useGetNewProductsQuery } from "@/features/products/productsApi";
+
 import ProductsCard, {
     ProductCardSkeleton,
 } from "@/components/product/ProductsCard";
+import SectionHeader from "./SectionHeader";
 
 const NewArrivalProducts = () => {
     // Fetch the latest products and track the loading state
@@ -37,17 +38,14 @@ const NewArrivalProducts = () => {
                 {/* Responsive product grid */}
                 <div className="grid gap-6 grid-cols-2 lg:grid-cols-4">
                     {/* Show skeletons while products are loading */}
-                    {isLoading
-                        ? Array.from({ length: 4 }).map((_, index) => (
-                              <ProductCardSkeleton key={index} />
-                          ))
-                        : products?.map((product) => (
-                              // Render each new arrival product
-                              <ProductsCard
-                                  key={product.id}
-                                  product={product}
-                              />
-                          ))}
+                    {isLoading ? (
+                        <div></div>
+                    ) : (
+                        products?.map((product) => (
+                            // Render each new arrival product
+                            <ProductsCard key={product.id} product={product} />
+                        ))
+                    )}
                 </div>
             </div>
         </section>

@@ -1,4 +1,5 @@
 import { Outlet } from "react-router";
+import ScrollToTop from "./ScrollToTop";
 import Header from "../Header";
 import BottomNavigation from "../BottomNavigation";
 import Footer from "../Footer";
@@ -6,6 +7,7 @@ import Footer from "../Footer";
 const RootLayout = () => {
     return (
         <div className="flex flex-col min-h-dvh pb-14 md:pb-0 scrollbar-thin">
+            <ScrollToTop />
             <Header />
 
             <main className="flex-1">

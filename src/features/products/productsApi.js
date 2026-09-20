@@ -43,6 +43,16 @@ export const productsApi = supabaseApi.injectEndpoints({
             }),
             providesTags: ["Products"],
         }),
+        getProductBySlug: builder.query({
+            query: (slug) => ({
+                table: "products",
+                method: "select",
+                query: PRODUCT_SELECT,
+                filters: [{ column: "slug", operator: "eq", value: slug }],
+                single: true,
+            }),
+            providesTags: ["Products"],
+        }),
     }),
 });
 
@@ -50,4 +60,5 @@ export const {
     useGetNewProductsQuery,
     useGetTrendingProductsQuery,
     useGetBestSellerProductsQuery,
+    useGetProductBySlugQuery,
 } = productsApi;

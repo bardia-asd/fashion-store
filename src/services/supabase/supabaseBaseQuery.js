@@ -26,14 +26,17 @@ export const supabaseBaseQuery =
                 }
                 if (args.limit) builder = builder.limit(args.limit);
 
+                if (args.single) builder = builder.single();
+                else if (args.maybeSingle) builder = builder.maybeSingle();
+
                 const { data, error } = await builder;
                 if (error) throw error;
                 return { data };
             }
             if (method === "insert") {
-                const { data, error } = await query
-                    .insert(args.values)
-                    .select();
+                let builder = query.insert(args.values).select();
+                if (args.single) builder = builder.single();
+                const { data, error } = await builder;
                 if (error) throw error;
                 return { data };
             }
@@ -42,7 +45,9 @@ export const supabaseBaseQuery =
                 builder = args.match
                     ? builder.match(args.match)
                     : applyFilters(builder, args.filters);
-                const { data, error } = await builder.select();
+                builder = builder.select();
+                if (args.single) builder = builder.single();
+                const { data, error } = await builder;
                 if (error) throw error;
                 return { data };
             }

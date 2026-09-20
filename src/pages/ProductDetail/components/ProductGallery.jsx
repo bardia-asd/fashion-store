@@ -12,14 +12,14 @@ const ProductGallery = ({ gallery }) => {
 
     return (
         // Product image gallery with thumbnails
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 min-w-0">
             {/* Main product image */}
             <AspectRatio ratio={4 / 5}>
                 <img
                     src={activeImg.url}
                     alt="تصویر محصول"
                     loading="lazy"
-                    className="size-full object-cover rounded-3xl"
+                    className="absolute inset-0 size-full object-cover rounded-3xl"
                 />
             </AspectRatio>
 

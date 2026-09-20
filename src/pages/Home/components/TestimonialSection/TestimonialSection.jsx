@@ -40,6 +40,7 @@ const TestimonialSection = () => {
                     {/* Testimonial carousel */}
                     <Swiper
                         onSwiper={(swiper) => (swiperRef.current = swiper)}
+                        spaceBetween={10}
                         onSlideChange={(swiper) =>
                             setActiveIndex(swiper.activeIndex)
                         }

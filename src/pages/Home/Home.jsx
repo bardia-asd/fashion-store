@@ -3,6 +3,7 @@ import CategoriesSection from "./components/CategoriesSection";
 import HeroSection from "./components/HeroSection";
 import LookBookSection from "./components/LookBookSection";
 import NewArrivalProducts from "./components/NewArrivalProducts";
+import Newsletter from "./components/Newsletter";
 import PromoSection from "./components/PromoSection";
 import SocialGrid from "./components/SocialGrid";
 import TestimonialSections from "./components/TestimonialSection";
@@ -31,6 +32,8 @@ const Home = () => {
             <TestimonialSections />
 
             <SocialGrid />
+
+            <Newsletter />
         </>
     );
 };

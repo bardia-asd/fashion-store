@@ -1,27 +1,41 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import PropTypes from "prop-types";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+
 import { cn } from "cn";
 
 const ProductGallery = ({ gallery }) => {
     // Track the currently selected gallery image
     const [activeIndex, setActiveIndex] = useState(0);
-
-    // Get the currently selected image
-    const activeImg = gallery[activeIndex];
+    const swiperRef = useRef(null);
 
     return (
         // Product image gallery with thumbnails
         <div className="flex flex-col gap-3 min-w-0">
-            {/* Main product image */}
-            <AspectRatio ratio={4 / 5}>
-                <img
-                    src={activeImg.url}
-                    alt="تصویر محصول"
-                    loading="lazy"
-                    className="absolute inset-0 size-full object-cover rounded-3xl"
-                />
-            </AspectRatio>
+            {/* Main product image carousel */}
+            <Swiper
+                onSwiper={(swiper) => (swiperRef.current = swiper)}
+                onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
+                className="w-full rounded-3xl overflow-hidden cursor-pointer">
+                {/* Render each gallery image as a slide */}
+                {gallery.map((image) => (
+                    <SwiperSlide key={image.id}>
+                        {/* Maintain a consistent product image aspect ratio */}
+                        <AspectRatio ratio={4 / 5}>
+                            <img
+                                src={image.url}
+                                alt="تصویر محصول"
+                                loading="lazy"
+                                className="absolute inset-0 size-full object-cover"
+                            />
+                        </AspectRatio>
+                    </SwiperSlide>
+                ))}
+            </Swiper>
 
             {/* Gallery thumbnails */}
             <div className="flex items-center gap-2">

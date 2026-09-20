@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
 import "swiper/css";
 
 import { Button } from "@/components/ui/button";
@@ -40,10 +41,16 @@ const TestimonialSection = () => {
                     {/* Testimonial carousel */}
                     <Swiper
                         onSwiper={(swiper) => (swiperRef.current = swiper)}
+                        rewind={true}
+                        autoplay={{
+                            delay: 2500,
+                            disableOnInteraction: false,
+                        }}
                         spaceBetween={10}
                         onSlideChange={(swiper) =>
                             setActiveIndex(swiper.activeIndex)
                         }
+                        modules={[Autoplay]}
                         className="mySwiper">
                         {/* Render each testimonial as a slide */}
                         {testimonials.map((testimonial) => (

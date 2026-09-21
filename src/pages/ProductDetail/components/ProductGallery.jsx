@@ -41,13 +41,16 @@ const ProductGallery = ({ gallery }) => {
             <div className="flex items-center gap-2">
                 {gallery.map((image, i) => (
                     <button
+                        type="button"
                         key={image.id}
-                        onClick={() => setActiveIndex(i)}
+                        onClick={() => {
+                            setActiveIndex(i);
+                            swiperRef.current?.slideTo(i);
+                        }}
                         className={cn(
-                            "flex-1 rounded-2xl overflow-hidden",
+                            "flex-1 overflow-hidden rounded-2xl",
                             i === activeIndex && "ring-2 ring-primary",
                         )}>
-                        {/* Thumbnail image */}
                         <AspectRatio ratio={1 / 1}>
                             <img
                                 src={image.url}

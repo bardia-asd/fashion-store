@@ -1,8 +1,8 @@
-import { Check, Star } from "lucide-react";
 import PropTypes from "prop-types";
+import { Check } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { cn } from "cn";
+import RatingStars from "@/components/ui/RatingStars";
 
 const TestimonialCard = ({ testimonial }) => {
     return (
@@ -10,24 +10,11 @@ const TestimonialCard = ({ testimonial }) => {
         <Card className="cursor-pointer">
             <CardContent className="p-10 lg:p-14">
                 {/* Display the testimonial rating */}
-                <div className="flex items-center justify-center gap-2 mb-5">
-                    {[1, 2, 3, 4, 5].map((star) => {
-                        const isFilled = star <= Math.round(testimonial.rating);
-
-                        return (
-                            <Star
-                                key={star}
-                                className={cn(
-                                    "size-3",
-                                    isFilled
-                                        ? "text-yellow-500"
-                                        : "text-muted-foreground",
-                                )}
-                                fill={isFilled ? "currentColor" : "none"}
-                            />
-                        );
-                    })}
-                </div>
+                <RatingStars
+                    rating={testimonial.rating}
+                    size="size-4"
+                    className="justify-center mb-5"
+                />
 
                 {/* Customer testimonial text */}
                 <blockquote className="font-medium text-lg lg:text-xl text-center">

@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router";
-import { Star } from "lucide-react";
 
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Badge } from "@/components/ui/badge";
@@ -8,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { getTagStyle } from "../utils/getTagColor";
 import { formatPersianNumber } from "@/utils/formatter";
 import { cn } from "cn";
+import RatingStars from "@/components/ui/RatingStars";
 
 const ProductsCard = ({ product }) => {
     // Get the product thumbnail image
@@ -42,7 +42,7 @@ const ProductsCard = ({ product }) => {
                     <AspectRatio ratio={3 / 4}>
                         <img
                             src={thumbnail.url}
-                            alt=""
+                            alt={product.name_fa}
                             className="size-full object-cover group-hover:scale-105 transition-transform duration-400"
                         />
                     </AspectRatio>
@@ -94,26 +94,7 @@ const ProductsCard = ({ product }) => {
                     {/* Rating and available colors */}
                     <div className="mt-auto pt-1.5">
                         {/* Display five stars based on the average rating */}
-                        <div className="flex items-center gap-2">
-                            {[1, 2, 3, 4, 5].map((star) => {
-                                const isFilled = star <= Math.round(rating);
-
-                                return (
-                                    <Star
-                                        key={star}
-                                        className={cn(
-                                            "size-3",
-                                            isFilled
-                                                ? "text-yellow-500"
-                                                : "text-muted-foreground",
-                                        )}
-                                        fill={
-                                            isFilled ? "currentColor" : "none"
-                                        }
-                                    />
-                                );
-                            })}
-                        </div>
+                        <RatingStars rating={rating} />
 
                         {/* Display the unique available product colors */}
                         <div className="mt-2 flex flex-wrap gap-1.5">

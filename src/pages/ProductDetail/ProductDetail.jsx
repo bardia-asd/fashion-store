@@ -14,6 +14,7 @@ import { useGetProductBySlugQuery } from "@/features/products/productsApi";
 import ProductGallery from "./components/ProductGallery";
 import ProductInfo from "./components/ProductInfo";
 import ProductDetailsTabs from "./components/ProductDetailsTabs";
+import ProductReviewSection from "./components/ProductReviewSection";
 
 const ProductDetail = () => {
     const { productSlug: slug } = useParams();
@@ -65,6 +66,8 @@ const ProductDetail = () => {
                 description={product.description}
                 specifications={product.specifications}
             />
+
+            <ProductReviewSection reviews={product.reviews} />
         </div>
     );
 };

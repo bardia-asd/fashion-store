@@ -1,6 +1,6 @@
 import { supabaseApi } from "@/services/supabase/supabaseApi";
 
-const PRODUCT_SELECT = `*, product_images(*), product_variants(*, color:colors(*)), brand:brands(*), category:categories(*), reviews(rating)`;
+const PRODUCT_SELECT = `*, product_images(*), product_variants(*, color:colors(*)), brand:brands(*), category:categories(*), reviews(*)`;
 
 export const productsApi = supabaseApi.injectEndpoints({
     endpoints: (builder) => ({

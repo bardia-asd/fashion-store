@@ -221,7 +221,7 @@ const ProductInfo = ({ product }) => {
                         <ToggleGroupItem
                             key={size}
                             value={size}
-                            className="w-12 h-9 rounded-full border bg-white data-pressed:bg-primary data-pressed:text-primary-foreground">
+                            className="px-3 h-9 rounded-full border bg-white data-pressed:bg-primary data-pressed:text-primary-foreground">
                             {size}
                         </ToggleGroupItem>
                     ))}

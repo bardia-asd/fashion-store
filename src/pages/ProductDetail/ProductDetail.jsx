@@ -15,14 +15,14 @@ import ProductGallery from "./components/ProductGallery";
 import ProductInfo from "./components/ProductInfo";
 import ProductDetailsTabs from "./components/ProductDetailsTabs";
 import ProductReviewSection from "./components/ProductReviewSection";
+import RelatedProducts from "./components/RelatedProducts";
 
 const ProductDetail = () => {
     const { productSlug: slug } = useParams();
 
-    const { data: product, isLoading } = useGetProductBySlugQuery(slug);
+    const { data: product, isLoading } = useGetProductBySlugQuery({ slug });
 
     if (isLoading) return null;
-    console.log(product);
 
     return (
         <div className="container-app my-8">
@@ -68,6 +68,11 @@ const ProductDetail = () => {
             />
 
             <ProductReviewSection reviews={product.reviews} />
+
+            <RelatedProducts
+                productId={product.id}
+                categoryId={product.category_id}
+            />
         </div>
     );
 };

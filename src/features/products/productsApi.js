@@ -44,12 +44,34 @@ export const productsApi = supabaseApi.injectEndpoints({
             providesTags: ["Products"],
         }),
         getProductBySlug: builder.query({
-            query: (slug) => ({
+            query: ({ slug }) => ({
                 table: "products",
                 method: "select",
                 query: PRODUCT_SELECT,
                 filters: [{ column: "slug", operator: "eq", value: slug }],
                 single: true,
+            }),
+            providesTags: ["Products"],
+        }),
+        getRelatedProducts: builder.query({
+            query: ({ id, categoryId }) => ({
+                table: "products",
+                method: "select",
+                query: PRODUCT_SELECT,
+                filters: [
+                    { column: "is_active", operator: "eq", value: true },
+                    {
+                        column: "category_id",
+                        operator: "eq",
+                        value: categoryId,
+                    },
+                    {
+                        column: "id",
+                        operator: "neq",
+                        value: id,
+                    },
+                ],
+                limit: 4,
             }),
             providesTags: ["Products"],
         }),
@@ -61,4 +83,5 @@ export const {
     useGetTrendingProductsQuery,
     useGetBestSellerProductsQuery,
     useGetProductBySlugQuery,
+    useGetRelatedProductsQuery,
 } = productsApi;

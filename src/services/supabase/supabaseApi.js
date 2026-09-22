@@ -4,6 +4,6 @@ import { supabaseBaseQuery } from "./supabaseBaseQuery";
 export const supabaseApi = createApi({
     reducerPath: "supabaseApi",
     baseQuery: supabaseBaseQuery(),
-    tagTypes: ["Categories", "Products", "Orders"],
+    tagTypes: ["Categories", "Products", "Orders", "Colors", "Brands"],
     endpoints: () => ({}),
 });

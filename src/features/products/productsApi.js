@@ -4,6 +4,16 @@ const PRODUCT_SELECT = `*, product_images(*), product_variants(*, color:colors(*
 
 export const productsApi = supabaseApi.injectEndpoints({
     endpoints: (builder) => ({
+        getProducts: builder.query({
+            query: () => ({
+                table: "products",
+                method: "select",
+                query: PRODUCT_SELECT,
+                filters: [],
+                orderBy: { column: "created_at", ascending: false },
+            }),
+            providesTags: ["Products"],
+        }),
         getNewProducts: builder.query({
             query: () => ({
                 table: "products",
@@ -79,6 +89,7 @@ export const productsApi = supabaseApi.injectEndpoints({
 });
 
 export const {
+    useGetProductsQuery,
     useGetNewProductsQuery,
     useGetTrendingProductsQuery,
     useGetBestSellerProductsQuery,

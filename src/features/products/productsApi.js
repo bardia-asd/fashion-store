@@ -1,16 +1,62 @@
 import { supabaseApi } from "@/services/supabase/supabaseApi";
 
-const PRODUCT_SELECT = `*, product_images(*), product_variants(*, color:colors(*)), brand:brands(*), category:categories(*), reviews(*)`;
+const PRODUCT_SELECT = `*, product_images(*), product_variants!inner(*, color:colors(*)), brand:brands!inner(*), category:categories!inner(*), reviews(*)`;
+
+const SORT_MAP = {
+    newest: { column: "created_at", ascending: false },
+    "price-asc": { column: "price", ascending: true },
+    "price-desc": { column: "price", ascending: false },
+};
 
 export const productsApi = supabaseApi.injectEndpoints({
     endpoints: (builder) => ({
         getProducts: builder.query({
-            query: () => ({
+            query: ({
+                category,
+                brands,
+                colors,
+                sizes,
+                minPrice,
+                maxPrice,
+                sort,
+            } = {}) => ({
                 table: "products",
                 method: "select",
                 query: PRODUCT_SELECT,
-                filters: [],
-                orderBy: { column: "created_at", ascending: false },
+                filters: [
+                    brands?.length && {
+                        column: "brand.slug",
+                        operator: "in",
+                        value: brands,
+                    },
+                    category &&
+                        category !== "all" && {
+                            column: "category.slug",
+                            operator: "eq",
+                            value: category,
+                        },
+                    colors?.length && {
+                        column: "product_variants.color_id",
+                        operator: "in",
+                        value: colors,
+                    },
+                    sizes?.length && {
+                        column: "product_variants.size",
+                        operator: "in",
+                        value: sizes,
+                    },
+                    minPrice != null && {
+                        column: "price",
+                        operator: "gte",
+                        value: minPrice,
+                    },
+                    maxPrice != null && {
+                        column: "price",
+                        operator: "lte",
+                        value: maxPrice,
+                    },
+                ].filter(Boolean),
+                orderBy: SORT_MAP[sort] ?? SORT_MAP.newest,
             }),
             providesTags: ["Products"],
         }),

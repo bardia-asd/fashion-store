@@ -53,7 +53,7 @@ const ProductDetail = () => {
                     {/* Product brand breadcrumb */}
                     <BreadcrumbItem>
                         <BreadcrumbLink
-                            href={`/products?brand=${product.brand.slug}`}>
+                            href={`/products?brands=${product.brand.slug}`}>
                             {product.brand.name_fa}
                         </BreadcrumbLink>
                     </BreadcrumbItem>

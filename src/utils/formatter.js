@@ -2,6 +2,13 @@ export const formatPersianNumber = (value) => {
     return new Intl.NumberFormat("fa-IR").format(value).replace("٫", ".");
 };
 
+export const toPlainNumber = (str) => {
+    const persianToLatin = str.replace(/[۰-۹]/g, (d) =>
+        "۰۱۲۳۴۵۶۷۸۹".indexOf(d),
+    );
+    return persianToLatin.replace(/[^\d]/g, ""); // strip commas etc.
+};
+
 export const formatReviewDate = (date) => {
     if (!date) return "";
 

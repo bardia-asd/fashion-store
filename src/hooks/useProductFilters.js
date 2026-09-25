@@ -16,6 +16,7 @@ export const useProductFilters = () => {
         maxPrice: searchParams.get("max")
             ? Number(searchParams.get("max"))
             : null,
+        sort: searchParams.get("sort") ?? "newest",
     };
 
     // Update a single filter in the URL

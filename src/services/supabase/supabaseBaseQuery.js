@@ -1,11 +1,10 @@
 import { supabase } from "./client";
 
 const applyFilters = (builder, filters = []) =>
-    filters.reduce(
-        (acc, { column, operator, value }) =>
-            acc.filter(column, operator, value),
-        builder,
-    );
+    filters.reduce((acc, { column, operator, value }) => {
+        if (operator === "in") return acc.in(column, value);
+        return acc.filter(column, operator, value);
+    }, builder);
 
 export const supabaseBaseQuery =
     () =>

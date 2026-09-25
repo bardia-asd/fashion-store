@@ -5,9 +5,7 @@ import { Button } from "@/components/ui/button";
 
 import { useGetNewProductsQuery } from "@/features/products/productsApi";
 
-import ProductsCard, {
-    ProductCardSkeleton,
-} from "@/components/product/ProductsCard";
+import ProductsCard from "@/components/product/ProductsCard";
 import SectionHeader from "./SectionHeader";
 
 const NewArrivalProducts = () => {

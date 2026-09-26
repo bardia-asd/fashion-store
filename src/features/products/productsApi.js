@@ -19,6 +19,7 @@ export const productsApi = supabaseApi.injectEndpoints({
                 minPrice,
                 maxPrice,
                 sort,
+                search,
             } = {}) => ({
                 table: "products",
                 method: "select",
@@ -54,6 +55,11 @@ export const productsApi = supabaseApi.injectEndpoints({
                         column: "price",
                         operator: "lte",
                         value: maxPrice,
+                    },
+                    search.trim() && {
+                        column: "name_fa",
+                        operator: "ilike",
+                        value: `%${search.trim()}%`,
                     },
                 ].filter(Boolean),
                 orderBy: SORT_MAP[sort] ?? SORT_MAP.newest,

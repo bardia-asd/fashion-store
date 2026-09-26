@@ -25,6 +25,10 @@ export const supabaseBaseQuery =
                 }
                 if (args.limit) builder = builder.limit(args.limit);
 
+                if (args.range) {
+                    builder = builder.range(args.range.from, args.range.to);
+                }
+
                 if (args.single) builder = builder.single();
                 else if (args.maybeSingle) builder = builder.maybeSingle();
 

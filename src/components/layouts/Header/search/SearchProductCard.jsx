@@ -7,7 +7,7 @@ const SearchProductCard = () => {
         // Product card displayed in the search overlay
         <article>
             {/* Link to the product details page */}
-            <Link to="/products/suede-loafers">
+            <Link to={`/search?q=${encodeURIComponent("ژاکت جین کلاسیک")}`}>
                 {/* Maintain a consistent product image aspect ratio */}
                 <AspectRatio ratio={1 / 1.3}>
                     <img

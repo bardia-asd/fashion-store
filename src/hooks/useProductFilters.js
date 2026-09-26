@@ -17,6 +17,7 @@ export const useProductFilters = () => {
             ? Number(searchParams.get("max"))
             : null,
         sort: searchParams.get("sort") ?? "newest",
+        search: searchParams.get("q") ?? "",
     };
 
     // Update a single filter in the URL

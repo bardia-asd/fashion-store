@@ -5,8 +5,12 @@ import BrandLoader from "@/components/common/BrandLoader";
 import ProductsCard from "../ProductsCard";
 
 import { useProductFilters } from "@/hooks/useProductFilters";
+import ProductsEmptyState from "./ProductsEmptyState";
 
-const ProductsGrid = () => {
+const ProductsGrid = ({
+    emptyTitle = "محصولی یافت نشد",
+    emptyDescription = "با تغییر فیلترها دوباره امتحان کنید.",
+}) => {
     // Get the active product filters from the URL
     const { filters } = useProductFilters();
 
@@ -28,17 +32,29 @@ const ProductsGrid = () => {
         colors: colorIds,
     });
 
+    const isBusy = isLoading || isFetching;
+    const isEmpty = !isBusy && (products?.length ?? 0) === 0;
+
     return (
-        <div className="flex-1 grid gap-6 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
-            {isLoading || isFetching ? (
-                <div className="col-span-full">
-                    <BrandLoader size="sm" />
-                </div>
-            ) : (
-                products.map((product) => (
-                    <ProductsCard key={product.id} product={product} />
-                ))
-            )}
+        <div className="flex flex-col flex-1">
+            <div className="grid gap-6 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
+                {isBusy ? (
+                    <div className="col-span-full">
+                        <BrandLoader size="sm" />
+                    </div>
+                ) : isEmpty ? (
+                    <div className="col-span-full">
+                        <ProductsEmptyState
+                            title={emptyTitle}
+                            description={emptyDescription}
+                        />
+                    </div>
+                ) : (
+                    products.map((product) => (
+                        <ProductsCard key={product.id} product={product} />
+                    ))
+                )}
+            </div>
         </div>
     );
 };

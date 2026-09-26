@@ -30,7 +30,7 @@ const ProductSort = () => {
                 </span>
             </SelectTrigger>
 
-            <SelectContent className="-bottom-11">
+            <SelectContent>
                 {SORT_OPTIONS.map((sort) => (
                     <SelectItem key={sort.value} value={sort.value}>
                         {sort.label}

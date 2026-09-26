@@ -5,7 +5,7 @@ const SearchTermLink = ({ term }) => {
     return (
         // Link to the products page for the selected search term
         <Link
-            to="/products"
+            to={`/search?q=${encodeURIComponent(term)}`}
             className="px-3.5 py-2 md:px-5 md:py-2.5 rounded-full bg-muted font-medium text-xs md:text-sm">
             {/* Display the search term */}
             {term}

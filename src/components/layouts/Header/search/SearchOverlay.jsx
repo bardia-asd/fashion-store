@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { Search, XIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -25,14 +25,29 @@ const trendingSearches = [
 const SearchOverlay = () => {
     // Controls whether the search overlay is open
     const [open, setOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
 
     // Gets the current URL path
-    const { pathname } = useLocation();
+    const { pathname, search } = useLocation();
+    const navigate = useNavigate();
 
     // Close the search overlay whenever the route changes
     useEffect(() => {
+        setSearchQuery("");
         setOpen(false);
-    }, [pathname]);
+    }, [pathname, search]);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        const query = searchQuery.trim();
+
+        if (!query) return;
+
+        setSearchQuery("");
+        setOpen(false);
+        navigate(`/search?q=${encodeURIComponent(query)}`);
+    };
 
     return (
         // Dialog controls the search overlay's open and close state
@@ -57,16 +72,22 @@ const SearchOverlay = () => {
                 <div className="container-app max-w-5xl w-full">
                     {/* Search input and close button */}
                     <DialogHeader className="flex-row items-center gap-1 lg:gap-4">
-                        {/* Search icon */}
-                        <span className="text-muted-foreground pointer-events-none">
-                            <Search size={22} />
-                        </span>
+                        <form
+                            onSubmit={handleSubmit}
+                            className="flex flex-1 items-center gap-2">
+                            <Search
+                                size={22}
+                                className="shrink-0 text-muted-foreground"
+                            />
 
-                        {/* Search input */}
-                        <Input
-                            className="flex-1 h-9 md:h-12 border-none bg-transparent! outline-none ring-0 focus-visible:ring-0 focus-visible:border-none shadow-none text-lg md:text-2xl placeholder:text-lg md:placeholder:text-2xl"
-                            placeholder="جستجو در استایل‌ها، محصولات، کالکشن‌ها..."
-                        />
+                            <Input
+                                autoFocus
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="h-9 flex-1 border-none bg-transparent! text-lg shadow-none outline-none ring-0 focus-visible:border-none focus-visible:ring-0 placeholder:text-lg md:h-12 md:text-2xl md:placeholder:text-2xl"
+                                placeholder="جستجو در استایل‌ها، محصولات، کالکشن‌ها..."
+                            />
+                        </form>
 
                         {/* Close search overlay */}
                         <DialogClose

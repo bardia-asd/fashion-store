@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useDispatch, useSelector } from "react-redux";
 
 import { Field, FieldError, FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -16,9 +17,23 @@ import {
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 
+import {
+    selectAuthError,
+    selectAuthStatus,
+} from "@/features/auth/authSelectors";
+import { signIn } from "@/features/auth/authSlice";
+
 import { loginSchema } from "@/utils/validation";
 
 const LoginForm = () => {
+    // Get authentication status and error from Redux
+    const status = useSelector(selectAuthStatus);
+    const error = useSelector(selectAuthError);
+
+    // Get the Redux dispatch function and navigation helper
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     // Initialize the form with Zod validation
     const {
         register,
@@ -29,15 +44,22 @@ const LoginForm = () => {
     // Control password visibility
     const [showPassword, setShowPassword] = useState(false);
 
-    // Handle validated form submission
-    const onSubmit = (data) => {
-        console.log(data);
+    // Submit login credentials through the authentication thunk
+    const onSubmit = async (data) => {
+        const result = await dispatch(
+            signIn({ email: data.email, password: data.password }),
+        );
+
+        // Navigate to the home page after a successful login
+        if (signIn.fulfilled.match(result)) {
+            navigate("/");
+        }
     };
 
     return (
         // Login form
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <FieldGroup className="gap-5 mb-5">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+            <FieldGroup className="gap-5">
                 {/* Email field */}
                 <Field>
                     <Label htmlFor="email">ایمیل</Label>
@@ -114,9 +136,19 @@ const LoginForm = () => {
                 </Field>
             </FieldGroup>
 
+            {/* Display authentication error from the server */}
+            {error && (
+                <p className="text-sm font-normal text-destructive">{error}</p>
+            )}
+
             {/* Submit login form */}
-            <Button type="submit" className="w-full h-14 rounded-xs">
-                ورود به حساب
+            <Button
+                type="submit"
+                className="w-full h-14 rounded-xs"
+                disabled={status === "loading"}>
+                {/* Show a loading message while login is processing */}
+                {status === "loading" ? "در حال ورود..." : " ورود به حساب"}
+
                 <ArrowLeft />
             </Button>
         </form>

@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Link } from "react-router";
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 
 import { Field, FieldError, FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -16,9 +17,23 @@ import {
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 
+import {
+    selectAuthError,
+    selectAuthStatus,
+} from "@/features/auth/authSelectors";
+import { signUp } from "@/features/auth/authSlice";
+
 import { registerSchema } from "@/utils/validation";
 
 const RegisterForm = () => {
+    // Get authentication status and error from Redux
+    const status = useSelector(selectAuthStatus);
+    const error = useSelector(selectAuthError);
+
+    // Get the Redux dispatch function and navigation helper
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     // Initialize the form with Zod validation
     const {
         register,
@@ -32,13 +47,29 @@ const RegisterForm = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-    // Handle validated form submission
-    const onSubmit = (data) => {
-        console.log(data);
+    // Submit registration data through the authentication thunk
+    const onSubmit = async (data) => {
+        const result = await dispatch(
+            signUp({
+                name: data.name,
+                email: data.email,
+                password: data.password,
+            }),
+        );
+
+        // Navigate based on whether a session was created after signup
+        if (signUp.fulfilled.match(result)) {
+            if (result.payload.session) {
+                navigate("/");
+            } else {
+                navigate("/signin");
+            }
+        }
     };
+
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <FieldGroup className="gap-5 mb-5">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+            <FieldGroup className="gap-5">
                 {/* Name field */}
                 <Field>
                     <Label htmlFor="name">نام و نام خانوادگی</Label>
@@ -163,9 +194,19 @@ const RegisterForm = () => {
                 </Field>
             </FieldGroup>
 
-            {/* Submit login form */}
-            <Button type="submit" className="w-full h-14 rounded-xs">
-                ایجاد حساب
+            {/* Display authentication error from the server */}
+            {error && (
+                <p className="text-sm font-normal text-destructive">{error}</p>
+            )}
+
+            {/* Submit registration form */}
+            <Button
+                type="submit"
+                className="w-full h-14 rounded-xs"
+                disabled={status === "loading"}>
+                {/* Show a loading message while registration is processing */}
+                {status === "loading" ? "در حال ثبت‌نام..." : "ایجاد حساب"}
+
                 <ArrowLeft />
             </Button>
         </form>

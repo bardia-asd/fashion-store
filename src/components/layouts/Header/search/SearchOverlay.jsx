@@ -15,6 +15,8 @@ import { Input } from "@/components/ui/input";
 import SearchTermLink from "./SearchTermLink";
 import SearchProductCard from "./SearchProductCard";
 
+import { useRecentSearches } from "@/hooks/useRecentSearches";
+
 const trendingSearches = [
     "پالتوی پشمی",
     "شلوار کتان",
@@ -23,27 +25,36 @@ const trendingSearches = [
 ];
 
 const SearchOverlay = () => {
-    // Controls whether the search overlay is open
+    // Control whether the search overlay is open
     const [open, setOpen] = useState(false);
+
+    // Store the current search input
     const [searchQuery, setSearchQuery] = useState("");
 
-    // Gets the current URL path
+    // Get recent searches and search history actions
+    const { recentSearches, addSearch, clearSearches } = useRecentSearches();
+
+    // Get the current URL and navigation function
     const { pathname, search } = useLocation();
     const navigate = useNavigate();
 
-    // Close the search overlay whenever the route changes
+    // Reset the search state whenever the route changes
     useEffect(() => {
         setSearchQuery("");
         setOpen(false);
     }, [pathname, search]);
 
+    // Submit the search query and navigate to the search page
     const handleSubmit = (e) => {
         e.preventDefault();
 
         const query = searchQuery.trim();
 
+        // Ignore empty search queries
         if (!query) return;
 
+        // Save the search and navigate to the results page
+        addSearch(query);
         setSearchQuery("");
         setOpen(false);
         navigate(`/search?q=${encodeURIComponent(query)}`);
@@ -75,11 +86,13 @@ const SearchOverlay = () => {
                         <form
                             onSubmit={handleSubmit}
                             className="flex flex-1 items-center gap-2">
+                            {/* Search icon */}
                             <Search
                                 size={22}
                                 className="shrink-0 text-muted-foreground"
                             />
 
+                            {/* Search input */}
                             <Input
                                 autoFocus
                                 value={searchQuery}
@@ -105,26 +118,41 @@ const SearchOverlay = () => {
                     </DialogHeader>
 
                     {/* Recent searches */}
-                    <div className="mt-6 md:mt-10">
-                        <span className="text-xs text-secondary-foreground font-bold">
-                            جستجوهای اخیر
-                        </span>
+                    {recentSearches?.length > 0 && (
+                        <div className="mt-6 md:mt-10">
+                            <div className="flex items-center justify-between">
+                                {/* Recent searches title */}
+                                <span className="text-xs font-bold text-secondary-foreground">
+                                    جستجوهای اخیر
+                                </span>
 
-                        {/* Render recent search terms */}
-                        <div className="flex flex-wrap gap-1.5 md:gap-2 mt-3 md:mt-5">
-                            {trendingSearches.map((term) => (
-                                <SearchTermLink key={term} term={term} />
-                            ))}
+                                {/* Clear search history */}
+                                <Button
+                                    variant="link"
+                                    size="sm"
+                                    onClick={clearSearches}
+                                    className="h-auto px-2 py-1 text-xs text-muted-foreground">
+                                    پاک کردن
+                                </Button>
+                            </div>
+
+                            {/* Recent search terms */}
+                            <div className="mt-3 flex flex-wrap gap-1.5 md:mt-5 md:gap-2">
+                                {recentSearches.map((term) => (
+                                    <SearchTermLink key={term} term={term} />
+                                ))}
+                            </div>
                         </div>
-                    </div>
+                    )}
 
                     {/* Popular searches */}
                     <div className="mt-6 md:mt-10">
+                        {/* Popular searches title */}
                         <span className="text-xs text-secondary-foreground font-bold">
                             جستجوهای پرطرفدار
                         </span>
 
-                        {/* Render popular search terms */}
+                        {/* Popular search terms */}
                         <div className="flex flex-wrap gap-1.5 md:gap-2 mt-3 md:mt-5">
                             {trendingSearches.map((term) => (
                                 <SearchTermLink key={term} term={term} />
@@ -134,6 +162,7 @@ const SearchOverlay = () => {
 
                     {/* Featured products */}
                     <div className="mt-6 md:mt-10">
+                        {/* Featured products title */}
                         <span className="text-xs text-secondary-foreground font-bold">
                             محصولات ویژه
                         </span>

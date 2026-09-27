@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -33,6 +33,9 @@ const LoginForm = () => {
     // Get the Redux dispatch function and navigation helper
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const from = location.state?.from || "/";
 
     // Initialize the form with Zod validation
     const {
@@ -52,7 +55,7 @@ const LoginForm = () => {
 
         // Navigate to the home page after a successful login
         if (signIn.fulfilled.match(result)) {
-            navigate("/");
+            navigate(from, { replace: true });
         }
     };
 

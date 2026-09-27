@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import { ShoppingBag, XIcon } from "lucide-react";
+import { useLocation } from "react-router";
 
 import {
     Sheet,
@@ -17,9 +19,17 @@ import CartSummary from "./CartSummary";
 import { formatPersianNumber } from "@/utils/formatter";
 
 const CartDrawer = () => {
+    const [open, setOpen] = useState(false);
+    const { pathname } = useLocation();
+
+    // Close the drawer whenever the route changes
+    useEffect(() => {
+        setOpen(false);
+    }, [pathname]);
+
     return (
         // Sheet controls the cart drawer's open and close state
-        <Sheet>
+        <Sheet open={open} onOpenChange={setOpen}>
             {/* Cart button that opens the drawer */}
             <SheetTrigger
                 render={

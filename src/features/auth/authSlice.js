@@ -36,21 +36,33 @@ export const signOut = createAsyncThunk(
     "auth/signOut",
     async (_, { rejectWithValue }) => {
         const { error } = await supabase.auth.signOut();
+
         if (error) return rejectWithValue(error.message);
+
         return null;
     },
 );
 
 export const initAuth = createAsyncThunk("auth/init", async () => {
     const { data } = await supabase.auth.getSession();
-    return { session: data.session, user: data.session?.user ?? null };
+
+    return {
+        session: data.session,
+        user: data.session?.user ?? null,
+    };
 });
 
-const initialState = { name: null, status: "idle", session: null, error: null };
+const initialState = {
+    user: null,
+    status: "idle",
+    session: null,
+    error: null,
+};
 
 const authSlice = createSlice({
     name: "auth",
     initialState,
+
     reducers: {
         setSession: (state, action) => {
             state.session = action.payload;
@@ -58,6 +70,7 @@ const authSlice = createSlice({
             state.status = action.payload ? "authenticated" : "unauthenticated";
         },
     },
+
     extraReducers: (builder) => {
         builder
             // signUp
@@ -76,6 +89,7 @@ const authSlice = createSlice({
                 state.status = "error";
                 state.error = action.payload;
             })
+
             // signIn
             .addCase(signIn.pending, (state) => {
                 state.status = "loading";
@@ -90,13 +104,19 @@ const authSlice = createSlice({
                 state.status = "error";
                 state.error = action.payload;
             })
+
             // signOut
             .addCase(signOut.fulfilled, (state) => {
                 state.status = "unauthenticated";
                 state.user = null;
                 state.session = null;
             })
+            .addCase(signOut.rejected, (state, action) => {
+                state.status = "error";
+                state.error = action.payload;
+            })
 
+            // initAuth
             .addCase(initAuth.fulfilled, (state, action) => {
                 state.user = action.payload.user;
                 state.session = action.payload.session;
@@ -108,4 +128,5 @@ const authSlice = createSlice({
 });
 
 export const { setSession } = authSlice.actions;
+
 export default authSlice.reducer;

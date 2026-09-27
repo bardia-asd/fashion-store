@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router";
-import { Heart, Menu, Search, User, XIcon } from "lucide-react";
+import { Heart, LogIn, Menu, XIcon } from "lucide-react";
+import { useSelector } from "react-redux";
 
 import { Button } from "@/components/ui/button";
 
@@ -9,9 +10,13 @@ import CartDrawer from "./cart";
 import AccountMenu from "./AccountMenu";
 import SearchOverlay from "./search/SearchOverlay";
 
+import { selectAuthStatus } from "@/features/auth/authSelectors";
+
 import { navItems } from "@/data/navData";
 
 const Header = () => {
+    const status = useSelector(selectAuthStatus);
+
     // Controls whether the mobile navigation is open
     const [isMobileOpen, setIsMobileOpen] = useState(false);
 
@@ -56,8 +61,23 @@ const Header = () => {
                         {/* Search */}
                         <SearchOverlay />
 
-                        {/* Account */}
-                        <AccountMenu />
+                        {/* Show login/register button for unauthenticated users */}
+                        {status !== "authenticated" ? (
+                            <Button
+                                variant="outline"
+                                className="hidden md:inline-flex bg-transparent! h-8.5 [&_svg:not([class*='size-'])]:size-4.5"
+                                nativeButton={false}
+                                render={
+                                    <Link to="/signin">
+                                        <LogIn className="rotate-180" />
+                                        ورود | ثبت‌نام
+                                    </Link>
+                                }
+                            />
+                        ) : (
+                            // Show the account menu for authenticated users
+                            <AccountMenu />
+                        )}
 
                         {/* Wishlist */}
                         <Button

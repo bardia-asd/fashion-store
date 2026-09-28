@@ -1,4 +1,4 @@
-import { Home, Heart, ShoppingBag, User } from "lucide-react";
+import { Home, Heart, User } from "lucide-react";
 
 export const navItems = [
     {
@@ -34,18 +34,13 @@ export const mobileBottomNavItems = [
         icon: Home,
     },
     {
-        label: "سبد خرید",
-        href: "/cart",
-        icon: ShoppingBag,
-    },
-    {
         label: "علاقه‌مندی‌ها",
         href: "/wishlist",
         icon: Heart,
     },
     {
         label: "حساب",
-        href: "/account",
+        href: "/profile",
         icon: User,
     },
 ];

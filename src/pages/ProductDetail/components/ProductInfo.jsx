@@ -1,5 +1,6 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
 import {
     Heart,
     Minus,
@@ -20,6 +21,10 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion";
+
+import { addItem } from "@/features/cart/cartSlice";
+
+import { useQuantityCounter } from "@/hooks/useQuantityCounter";
 
 import { formatPersianNumber } from "@/utils/formatter";
 import { cn } from "cn";
@@ -46,6 +51,8 @@ const productInfo = [
 ];
 
 const ProductInfo = ({ product }) => {
+    const dispatch = useDispatch();
+
     // Get unique colors from the product variants
     const colors = product.product_variants
         ?.map((variant) => variant.color)
@@ -86,13 +93,48 @@ const ProductInfo = ({ product }) => {
     // Track the selected product options and quantity
     const [selectedColor, setSelectedColor] = useState(colors?.[0]);
     const [selectedSize, setSelectedSize] = useState(null);
-    const [qty, setQty] = useState(1);
 
-    // Increase the product quantity
-    const increment = () => setQty((prev) => prev + 1);
+    const selectedVariant = product.product_variants.find(
+        (v) => v.size === selectedSize && v.color_id === selectedColor.id,
+    );
 
-    // Decrease the product quantity without going below one
-    const decrement = () => setQty((prev) => Math.max(prev - 1, 1));
+    const stock = selectedVariant?.stock ?? 0;
+
+    const { quantity, increment, decrement, setQuantity } = useQuantityCounter({
+        max: stock,
+    });
+
+    const variantsForColor = product.product_variants.filter(
+        (v) => v.color_id === selectedColor.id,
+    );
+
+    const isSizeAvailable = (size) => {
+        const variant = variantsForColor.find((v) => v.size === size);
+        return Boolean(variant) && variant.stock > 0;
+    };
+
+    const handleColorChange = (color) => {
+        setSelectedColor(color);
+        setSelectedSize(null);
+        setQuantity(1);
+    };
+
+    const handleAddToCart = () => {
+        dispatch(
+            addItem({
+                variantId: selectedVariant.id,
+                productId: product.id,
+                name: product.name_fa,
+                image: product.product_images.find((img) => img.is_thumbnail)
+                    ?.url,
+                price: product.price,
+                size: selectedSize,
+                color: selectedColor,
+                stock,
+                quantity,
+            }),
+        );
+    };
 
     return (
         // Product information and purchase options
@@ -184,7 +226,7 @@ const ProductInfo = ({ product }) => {
                         // Keep the current color when the selection is cleared
                         if (value.length === 0) return;
 
-                        setSelectedColor(value[0]);
+                        handleColorChange(value[0]);
                     }}>
                     {colors.map((color) => (
                         <ToggleGroupItem
@@ -217,14 +259,19 @@ const ProductInfo = ({ product }) => {
                     value={[selectedSize]}
                     onValueChange={(value) => setSelectedSize(value[0])}
                     className="mb-2">
-                    {sizes.map((size) => (
-                        <ToggleGroupItem
-                            key={size}
-                            value={size}
-                            className="px-3 min-w-10 h-9 rounded-full border bg-white data-pressed:bg-primary data-pressed:text-primary-foreground">
-                            {size}
-                        </ToggleGroupItem>
-                    ))}
+                    {sizes.map((size) => {
+                        const available = isSizeAvailable(size);
+
+                        return (
+                            <ToggleGroupItem
+                                key={size}
+                                value={size}
+                                disabled={!available}
+                                className="px-3 min-w-10 h-9 rounded-full border bg-white data-pressed:bg-primary data-pressed:text-primary-foreground">
+                                {size}
+                            </ToggleGroupItem>
+                        );
+                    })}
                 </ToggleGroup>
 
                 {/* Prompt the user to select a size */}
@@ -252,7 +299,7 @@ const ProductInfo = ({ product }) => {
 
                     {/* Current quantity */}
                     <span className="flex-1 text-center">
-                        {formatPersianNumber(qty)}
+                        {formatPersianNumber(quantity)}
                     </span>
 
                     {/* Increase quantity */}
@@ -261,20 +308,36 @@ const ProductInfo = ({ product }) => {
                         size="icon-sm"
                         aria-label="افزایش تعداد"
                         className="bg-transparent! border-none"
+                        disabled={!selectedVariant || stock === 0}
                         onClick={increment}>
                         <Plus />
                     </Button>
                 </div>
             </div>
 
+            {selectedVariant && (
+                <div className="mt-2">
+                    {stock === 0 ? (
+                        <p className="text-xs text-red-500">ناموجود</p>
+                    ) : stock <= 5 ? (
+                        <p className="text-xs text-amber-500">
+                            فقط {formatPersianNumber(stock)} عدد باقی مانده
+                        </p>
+                    ) : null}
+                </div>
+            )}
+
             {/* Add-to-cart and wishlist actions */}
-            <div className="flex gap-3 my-6">
+            <div className="flex gap-3 mb-6 mt-4">
                 {/* Add product to cart */}
                 <Button
                     size="lg"
                     className="flex-1 h-13 rounded-xl"
-                    disabled={!selectedSize}>
-                    افزودن به سبد
+                    disabled={!selectedVariant || stock === 0}
+                    onClick={handleAddToCart}>
+                    {selectedSize && stock === 0
+                        ? "ناموجود"
+                        : "افزودن به سبد خرید"}
                 </Button>
 
                 {/* Toggle product wishlist */}

@@ -1,12 +1,22 @@
+import { useSelector } from "react-redux";
 import { Check } from "lucide-react";
+import { Link } from "react-router";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import { formatPersianNumber } from "@/utils/formatter";
-import { Link } from "react-router";
+import { selectCartSubtotal } from "@/features/cart/cartSelectors";
+
+const SHIPPING_COST = 150000;
+const DISCOUNT_PERCENT = 10;
 
 const CartSummary = () => {
+    const subTotal = useSelector(selectCartSubtotal);
+
+    const discountAmount = (subTotal * DISCOUNT_PERCENT) / 100;
+    const total = subTotal - discountAmount + SHIPPING_COST;
+
     // Prevent the coupon form from submitting and reloading the page
     const handleApplyCoupon = (e) => {
         e.preventDefault();
@@ -32,7 +42,7 @@ const CartSummary = () => {
                 {/* Display applied coupon discount */}
                 <span className="inline-flex items-center gap-1 text-success text-xs">
                     <Check size={12} />
-                    {formatPersianNumber(10)}% تخفیف اعمال شد
+                    {formatPersianNumber(DISCOUNT_PERCENT)}% تخفیف اعمال شد
                 </span>
             </div>
 
@@ -40,19 +50,19 @@ const CartSummary = () => {
             <div className="flex flex-col gap-2">
                 <div className="flex items-center justify-between text-sm text-muted-foreground">
                     <span>جمع جزء</span>
-                    <span>{formatPersianNumber(150000)}</span>
+                    <span>{formatPersianNumber(subTotal)}</span>
                 </div>
 
                 {/* Applied discount amount */}
                 <div className="flex items-center justify-between text-sm text-success">
                     <span>تخفیف</span>
-                    <span>{formatPersianNumber(15000)}</span>
+                    <span>{formatPersianNumber(discountAmount)}</span>
                 </div>
 
                 {/* Shipping cost */}
                 <div className="flex items-center justify-between text-sm text-muted-foreground">
                     <span>هزینه ارسال</span>
-                    <span>{formatPersianNumber(150000)}</span>
+                    <span>{formatPersianNumber(SHIPPING_COST)}</span>
                 </div>
             </div>
 
@@ -63,7 +73,7 @@ const CartSummary = () => {
 
                     {/* Display the final price with its currency */}
                     <p>
-                        {formatPersianNumber(125000)}{" "}
+                        {formatPersianNumber(total)}
                         <span className="font-normal text-xs">تومان</span>
                     </p>
                 </div>

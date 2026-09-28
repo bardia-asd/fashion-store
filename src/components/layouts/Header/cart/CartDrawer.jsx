@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { ShoppingBag, XIcon } from "lucide-react";
+import { useSelector } from "react-redux";
 import { useLocation } from "react-router";
 
 import {
@@ -17,10 +18,18 @@ import CartItem from "./CartItem";
 import CartSummary from "./CartSummary";
 
 import { formatPersianNumber } from "@/utils/formatter";
+import {
+    selectCartItems,
+    selectCartItemCount,
+} from "@/features/cart/cartSelectors";
 
 const CartDrawer = () => {
     const [open, setOpen] = useState(false);
     const { pathname } = useLocation();
+
+    const cartItems = useSelector(selectCartItems);
+    const counts = useSelector(selectCartItemCount);
+    console.log(cartItems);
 
     // Close the drawer whenever the route changes
     useEffect(() => {
@@ -36,7 +45,7 @@ const CartDrawer = () => {
                     <Button
                         variant="ghost"
                         size="icon"
-                        aria-label={`سبد خرید، ${formatPersianNumber(5)} کالا`}
+                        aria-label={`سبد خرید، ${formatPersianNumber(counts)} کالا`}
                         className="relative size-8.5 [&_svg:not([class*='size-'])]:size-4.5">
                         <ShoppingBag />
 
@@ -44,7 +53,7 @@ const CartDrawer = () => {
                         <span
                             aria-hidden="true"
                             className="absolute top-0 right-0 size-3 rounded-full bg-brand text-[10px] text-brand-foreground">
-                            {formatPersianNumber(5)}
+                            {formatPersianNumber(counts)}
                         </span>
                     </Button>
                 }
@@ -57,7 +66,9 @@ const CartDrawer = () => {
                 className="w-full! sm:w-auto gap-0">
                 {/* Drawer header with title and close button */}
                 <SheetHeader className="flex-row justify-between border-b px-6">
-                    <SheetTitle>سبد خرید ({formatPersianNumber(3)})</SheetTitle>
+                    <SheetTitle>
+                        سبد خرید ({formatPersianNumber(counts)})
+                    </SheetTitle>
 
                     {/* Close the cart drawer */}
                     <SheetClose
@@ -70,9 +81,9 @@ const CartDrawer = () => {
 
                 {/* Scrollable list of cart items */}
                 <div className="flex-1 overflow-y-auto divide-y divide-border px-6 scrollbar-thin">
-                    <CartItem />
-                    <CartItem />
-                    <CartItem />
+                    {cartItems.map((item) => (
+                        <CartItem key={item.id} item={item} />
+                    ))}
                 </div>
 
                 {/* Cart totals and checkout action */}

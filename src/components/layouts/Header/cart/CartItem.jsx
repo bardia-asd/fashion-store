@@ -1,10 +1,13 @@
+import { Link } from "react-router";
 import { useDispatch } from "react-redux";
 import { Minus, Plus, Trash } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { formatPersianNumber } from "@/utils/formatter";
-import { removeItem, updateQuantity } from "@/features/cart/cartSlice";
+import PropTypes from "prop-types";
 
-const CartItem = ({ item }) => {
+import { Button } from "@/components/ui/button";
+import { removeItem, updateQuantity } from "@/features/cart/guestCartSlice";
+import { formatPersianNumber } from "@/utils/formatter";
+
+const CartItem = ({ line }) => {
     const dispatch = useDispatch();
 
     return (
@@ -12,12 +15,14 @@ const CartItem = ({ item }) => {
         <div className="flex items-center gap-4 py-4">
             {/* Product image */}
             <div className="shrink-0 aspect-square w-20 rounded-2xl overflow-hidden">
-                <img
-                    src={item.image}
-                    alt={item.name}
-                    loading="lazy"
-                    className="size-full object-cover"
-                />
+                <Link to={`/products/${line.slug}`}>
+                    <img
+                        src={line.image}
+                        alt={line.name}
+                        loading="lazy"
+                        className="size-full object-cover"
+                    />
+                </Link>
             </div>
 
             {/* Product information and actions */}
@@ -26,23 +31,28 @@ const CartItem = ({ item }) => {
                 <div className="flex-1">
                     {/* Brand name */}
                     <span className="text-[10px] text-muted-foreground font-semibold tracking-wider">
-                        DBY
+                        {line.brand.name_fa}
                     </span>
 
                     {/* Product name */}
-                    <h3 className="mb-0.5 line-clamp-1">{item.name}</h3>
+                    <Link
+                        to={`/products/${line.slug}`}
+                        className="mb-0.5 line-clamp-1">
+                        {line.name}
+                    </Link>
 
                     {/* Selected size and color */}
                     <div className="flex items-center gap-2">
                         <span className="text-xs text-muted-foreground">
-                            سایز: {item.size}
+                            سایز: {line.size}
                         </span>
 
                         <span
                             className="inline-block size-3 rounded-full"
                             style={{
-                                backgroundColor: item.color.hex_code,
-                            }}></span>
+                                backgroundColor: line.color.hex_code,
+                            }}
+                        />
                     </div>
 
                     {/* Quantity controls */}
@@ -55,18 +65,18 @@ const CartItem = ({ item }) => {
                             onClick={() =>
                                 dispatch(
                                     updateQuantity({
-                                        id: item.id,
-                                        change: -1,
+                                        variantId: line.variantId,
+                                        quantity: line.quantity - 1,
                                     }),
                                 )
                             }
                             className="bg-transparent! border-none">
-                            {item.quantity > 1 ? <Minus /> : <Trash />}
+                            {line.quantity > 1 ? <Minus /> : <Trash />}
                         </Button>
 
                         {/* Current quantity */}
                         <span className="flex-1 text-center">
-                            {formatPersianNumber(item.quantity)}
+                            {formatPersianNumber(line.quantity)}
                         </span>
 
                         {/* Increase quantity */}
@@ -74,11 +84,12 @@ const CartItem = ({ item }) => {
                             variant="outline"
                             size="icon-xs"
                             aria-label="افزایش تعداد"
+                            disabled={line.quantity === line.stock}
                             onClick={() =>
                                 dispatch(
                                     updateQuantity({
-                                        id: item.id,
-                                        change: 1,
+                                        variantId: line.variantId,
+                                        quantity: line.quantity + 1,
                                     }),
                                 )
                             }
@@ -95,14 +106,14 @@ const CartItem = ({ item }) => {
                         variant="ghost"
                         size="icon-xs"
                         aria-label="حذف از سبد خرید"
-                        onClick={() => dispatch(removeItem(item.id))}
+                        onClick={() => dispatch(removeItem(line.variantId))}
                         className="text-muted-foreground hover:text-destructive">
                         <Trash />
                     </Button>
 
                     {/* Product price */}
                     <p className="text-sm font-bold whitespace-nowrap">
-                        {formatPersianNumber(item.price * item.quantity)}
+                        {formatPersianNumber(line.lineTotal)}
                         <span className="font-normal text-xs mr-0.5">
                             تومان
                         </span>
@@ -111,6 +122,25 @@ const CartItem = ({ item }) => {
             </div>
         </div>
     );
+};
+
+CartItem.propTypes = {
+    line: PropTypes.shape({
+        variantId: PropTypes.string.isRequired,
+        slug: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        image: PropTypes.string.isRequired,
+        quantity: PropTypes.number.isRequired,
+        stock: PropTypes.number.isRequired,
+        size: PropTypes.string.isRequired,
+        lineTotal: PropTypes.number.isRequired,
+        brand: PropTypes.shape({
+            name_fa: PropTypes.string.isRequired,
+        }).isRequired,
+        color: PropTypes.shape({
+            hex_code: PropTypes.string.isRequired,
+        }).isRequired,
+    }).isRequired,
 };
 
 export default CartItem;

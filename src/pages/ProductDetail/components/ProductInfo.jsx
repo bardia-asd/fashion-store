@@ -1,6 +1,7 @@
 import { useState } from "react";
-import PropTypes from "prop-types";
+
 import { useDispatch } from "react-redux";
+import PropTypes from "prop-types";
 import {
     Heart,
     Minus,
@@ -11,21 +12,18 @@ import {
     Truck,
 } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Button } from "@/components/ui/button";
-import { Toggle } from "@/components/ui/toggle";
 import {
     Accordion,
     AccordionContent,
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion";
-
-import { addItem } from "@/features/cart/cartSlice";
-
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Toggle } from "@/components/ui/toggle";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { addItem } from "@/features/cart/guestCartSlice";
 import { useQuantityCounter } from "@/hooks/useQuantityCounter";
-
 import { formatPersianNumber } from "@/utils/formatter";
 import { cn } from "cn";
 
@@ -50,6 +48,16 @@ const productInfo = [
     },
 ];
 
+const SIZE_ORDER = {
+    XS: 1,
+    S: 2,
+    M: 3,
+    L: 4,
+    XL: 5,
+    XXL: 6,
+    XXXL: 7,
+};
+
 const ProductInfo = ({ product }) => {
     const dispatch = useDispatch();
 
@@ -69,7 +77,20 @@ const ProductInfo = ({ product }) => {
         .filter(
             (size, index, self) =>
                 index === self.findIndex((item) => item === size),
-        );
+        )
+        .sort((a, b) => {
+            const aIsNumber = !Number.isNaN(Number(a));
+            const bIsNumber = !Number.isNaN(Number(b));
+
+            if (aIsNumber && bIsNumber) return Number(a) - Number(b);
+
+            if (!aIsNumber && !bIsNumber)
+                return (
+                    SIZE_ORDER[a.toUpperCase()] - SIZE_ORDER[b.toUpperCase()]
+                );
+
+            return aIsNumber ? -1 : 1;
+        });
 
     // Calculate the total number of reviews
     const reviewCount = product.reviews.length;
@@ -94,46 +115,50 @@ const ProductInfo = ({ product }) => {
     const [selectedColor, setSelectedColor] = useState(colors?.[0]);
     const [selectedSize, setSelectedSize] = useState(null);
 
+    // Find the variant matching the selected color and size
     const selectedVariant = product.product_variants.find(
         (v) => v.size === selectedSize && v.color_id === selectedColor.id,
     );
 
+    // Get the available stock for the selected variant
     const stock = selectedVariant?.stock ?? 0;
 
+    // Manage the selected quantity within the available stock
     const { quantity, increment, decrement, setQuantity } = useQuantityCounter({
         max: stock,
     });
 
+    // Get all variants available for the selected color
     const variantsForColor = product.product_variants.filter(
         (v) => v.color_id === selectedColor.id,
     );
 
+    // Check whether a specific size is available for the selected color
     const isSizeAvailable = (size) => {
         const variant = variantsForColor.find((v) => v.size === size);
+
         return Boolean(variant) && variant.stock > 0;
     };
 
+    // Reset the size and quantity when the selected color changes
     const handleColorChange = (color) => {
         setSelectedColor(color);
         setSelectedSize(null);
         setQuantity(1);
     };
 
+    // Add the selected variant and quantity to the cart
     const handleAddToCart = () => {
         dispatch(
             addItem({
                 variantId: selectedVariant.id,
                 productId: product.id,
-                name: product.name_fa,
-                image: product.product_images.find((img) => img.is_thumbnail)
-                    ?.url,
-                price: product.price,
-                size: selectedSize,
-                color: selectedColor,
-                stock,
                 quantity,
             }),
         );
+
+        // Reset the quantity after adding the item
+        setQuantity(1);
     };
 
     return (

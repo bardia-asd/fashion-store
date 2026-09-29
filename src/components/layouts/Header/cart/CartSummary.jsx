@@ -1,19 +1,15 @@
-import { useSelector } from "react-redux";
 import { Check } from "lucide-react";
+import PropTypes from "prop-types";
 import { Link } from "react-router";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
 import { formatPersianNumber } from "@/utils/formatter";
-import { selectCartSubtotal } from "@/features/cart/cartSelectors";
 
 const SHIPPING_COST = 150000;
 const DISCOUNT_PERCENT = 10;
 
-const CartSummary = () => {
-    const subTotal = useSelector(selectCartSubtotal);
-
+const CartSummary = ({ subTotal }) => {
     const discountAmount = (subTotal * DISCOUNT_PERCENT) / 100;
     const total = subTotal - discountAmount + SHIPPING_COST;
 
@@ -33,7 +29,6 @@ const CartSummary = () => {
                         aria-label="کد تخفیف"
                         className="rounded-full h-8.5"
                     />
-
                     <Button type="submit" className="rounded-full h-8.5">
                         اعمال
                     </Button>
@@ -87,6 +82,10 @@ const CartSummary = () => {
             </div>
         </>
     );
+};
+
+CartSummary.propTypes = {
+    subTotal: PropTypes.number.isRequired,
 };
 
 export default CartSummary;

@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+
 import { ShoppingBag, XIcon } from "lucide-react";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router";
 
+import { Button } from "@/components/ui/button";
 import {
     Sheet,
     SheetClose,
@@ -12,24 +14,22 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
+import { selectGuestCartItems } from "@/features/cart/cartSelectors";
+import { useCartLines } from "@/hooks/useCartLines";
+import { formatPersianNumber } from "@/utils/formatter";
 
 import CartItem from "./CartItem";
+import CartItemSkeleton from "./CartItemSkeleton";
 import CartSummary from "./CartSummary";
-
-import { formatPersianNumber } from "@/utils/formatter";
-import {
-    selectCartItems,
-    selectCartItemCount,
-} from "@/features/cart/cartSelectors";
+import EmptyCart from "./EmptyCart";
 
 const CartDrawer = () => {
     const [open, setOpen] = useState(false);
     const { pathname } = useLocation();
 
-    const cartItems = useSelector(selectCartItems);
-    const counts = useSelector(selectCartItemCount);
-    console.log(cartItems);
+    const guestCartItems = useSelector(selectGuestCartItems);
+    const { lines, isLoading, subTotal, itemCount } =
+        useCartLines(guestCartItems);
 
     // Close the drawer whenever the route changes
     useEffect(() => {
@@ -45,7 +45,7 @@ const CartDrawer = () => {
                     <Button
                         variant="ghost"
                         size="icon"
-                        aria-label={`سبد خرید، ${formatPersianNumber(counts)} کالا`}
+                        aria-label={`سبد خرید، ${formatPersianNumber(itemCount)} کالا`}
                         className="relative size-8.5 [&_svg:not([class*='size-'])]:size-4.5">
                         <ShoppingBag />
 
@@ -53,7 +53,7 @@ const CartDrawer = () => {
                         <span
                             aria-hidden="true"
                             className="absolute top-0 right-0 size-3 rounded-full bg-brand text-[10px] text-brand-foreground">
-                            {formatPersianNumber(counts)}
+                            {formatPersianNumber(itemCount)}
                         </span>
                     </Button>
                 }
@@ -67,7 +67,7 @@ const CartDrawer = () => {
                 {/* Drawer header with title and close button */}
                 <SheetHeader className="flex-row justify-between border-b px-6">
                     <SheetTitle>
-                        سبد خرید ({formatPersianNumber(counts)})
+                        سبد خرید ({formatPersianNumber(itemCount)})
                     </SheetTitle>
 
                     {/* Close the cart drawer */}
@@ -81,14 +81,20 @@ const CartDrawer = () => {
 
                 {/* Scrollable list of cart items */}
                 <div className="flex-1 overflow-y-auto divide-y divide-border px-6 scrollbar-thin">
-                    {cartItems.map((item) => (
-                        <CartItem key={item.id} item={item} />
-                    ))}
+                    {isLoading ? (
+                        <CartItemSkeleton />
+                    ) : lines.length > 0 ? (
+                        lines.map((line) => (
+                            <CartItem key={line.variantId} line={line} />
+                        ))
+                    ) : (
+                        <EmptyCart />
+                    )}
                 </div>
 
                 {/* Cart totals and checkout action */}
                 <SheetFooter className="border-t gap-4">
-                    <CartSummary />
+                    <CartSummary subTotal={subTotal} />
                 </SheetFooter>
             </SheetContent>
         </Sheet>

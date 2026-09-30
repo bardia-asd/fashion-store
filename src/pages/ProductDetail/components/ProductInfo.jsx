@@ -24,6 +24,7 @@ import { Toggle } from "@/components/ui/toggle";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { addItem } from "@/features/cart/guestCartSlice";
 import { useQuantityCounter } from "@/hooks/useQuantityCounter";
+import { useCartActions } from "@/hooks/useCartActions";
 import { formatPersianNumber } from "@/utils/formatter";
 import { cn } from "cn";
 
@@ -60,6 +61,7 @@ const SIZE_ORDER = {
 
 const ProductInfo = ({ product }) => {
     const dispatch = useDispatch();
+    const { addCartItem } = useCartActions();
 
     // Get unique colors from the product variants
     const colors = product.product_variants
@@ -149,13 +151,11 @@ const ProductInfo = ({ product }) => {
 
     // Add the selected variant and quantity to the cart
     const handleAddToCart = () => {
-        dispatch(
-            addItem({
-                variantId: selectedVariant.id,
-                productId: product.id,
-                quantity,
-            }),
-        );
+        addCartItem({
+            variantId: selectedVariant.id,
+            productId: product.id,
+            quantity,
+        });
 
         // Reset the quantity after adding the item
         setQuantity(1);

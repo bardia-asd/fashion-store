@@ -1,14 +1,44 @@
+import { useState } from "react";
 import { Link } from "react-router";
-import { useDispatch } from "react-redux";
 import { Minus, Plus, Trash } from "lucide-react";
 import PropTypes from "prop-types";
 
 import { Button } from "@/components/ui/button";
-import { removeItem, updateQuantity } from "@/features/cart/guestCartSlice";
 import { formatPersianNumber } from "@/utils/formatter";
+import { useCartActions } from "@/hooks/useCartActions";
+import { Spinner } from "@/components/ui/spinner";
 
 const CartItem = ({ line }) => {
-    const dispatch = useDispatch();
+    const { removeCartItem, updateCartQuantity } = useCartActions();
+    const [isUpdating, setIsUpdating] = useState(false);
+    const [isRemoving, setIsRemoving] = useState(false);
+
+    const handleRemove = async () => {
+        setIsRemoving(true);
+
+        try {
+            await removeCartItem({
+                variantId: line.variantId,
+                cartItemId: line.cartItemId,
+            });
+        } finally {
+            setIsRemoving(false);
+        }
+    };
+
+    const handleQuantityChange = async (quantity) => {
+        setIsUpdating(true);
+
+        try {
+            await updateCartQuantity({
+                variantId: line.variantId,
+                cartItemId: line.cartItemId,
+                quantity,
+            });
+        } finally {
+            setIsUpdating(false);
+        }
+    };
 
     return (
         // Individual product row in the cart
@@ -62,21 +92,21 @@ const CartItem = ({ line }) => {
                             variant="outline"
                             size="icon-xs"
                             aria-label="کاهش تعداد"
+                            disabled={isUpdating}
                             onClick={() =>
-                                dispatch(
-                                    updateQuantity({
-                                        variantId: line.variantId,
-                                        quantity: line.quantity - 1,
-                                    }),
-                                )
+                                handleQuantityChange(line.quantity - 1)
                             }
                             className="bg-transparent! border-none">
                             {line.quantity > 1 ? <Minus /> : <Trash />}
                         </Button>
 
                         {/* Current quantity */}
-                        <span className="flex-1 text-center">
-                            {formatPersianNumber(line.quantity)}
+                        <span className="flex-1 inline-flex items-center justify-center text-center">
+                            {isUpdating ? (
+                                <Spinner className="size-3" />
+                            ) : (
+                                formatPersianNumber(line.quantity)
+                            )}
                         </span>
 
                         {/* Increase quantity */}
@@ -84,14 +114,11 @@ const CartItem = ({ line }) => {
                             variant="outline"
                             size="icon-xs"
                             aria-label="افزایش تعداد"
-                            disabled={line.quantity === line.stock}
+                            disabled={
+                                isUpdating || line.quantity === line.stock
+                            }
                             onClick={() =>
-                                dispatch(
-                                    updateQuantity({
-                                        variantId: line.variantId,
-                                        quantity: line.quantity + 1,
-                                    }),
-                                )
+                                handleQuantityChange(line.quantity + 1)
                             }
                             className="bg-transparent! border-none">
                             <Plus />
@@ -106,9 +133,14 @@ const CartItem = ({ line }) => {
                         variant="ghost"
                         size="icon-xs"
                         aria-label="حذف از سبد خرید"
-                        onClick={() => dispatch(removeItem(line.variantId))}
+                        disabled={isUpdating || isRemoving}
+                        onClick={handleRemove}
                         className="text-muted-foreground hover:text-destructive">
-                        <Trash />
+                        {isRemoving ? (
+                            <Spinner className="size-3" />
+                        ) : (
+                            <Trash />
+                        )}
                     </Button>
 
                     {/* Product price */}

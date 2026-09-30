@@ -45,13 +45,6 @@ const guestCartSlice = createSlice({
 
             if (!item) return;
 
-            if (quantity <= 0) {
-                state.items = state.items.filter(
-                    (item) => item.variantId !== variantId,
-                );
-                return;
-            }
-
             item.quantity = quantity;
         },
 

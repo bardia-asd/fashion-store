@@ -6,7 +6,7 @@ const SectionHeader = ({ eyebrow, title, actions, direction = "col" }) => {
         // Section header with title and optional actions
         <div
             className={cn(
-                "flex justify-between gap-5 mb-12",
+                "flex justify-between gap-2 sm:gap-5 mb-6 lg:mb-12",
                 direction === "col"
                     ? "flex-col sm:flex-row sm:items-end"
                     : "flex-row items-end",

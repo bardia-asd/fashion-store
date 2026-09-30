@@ -1,6 +1,7 @@
 import { Navigate } from "react-router";
 import { useSelector } from "react-redux";
 import { selectAuthStatus } from "@/features/auth/authSelectors";
+import BrandLoader from "./common/BrandLoader";
 
 const GuestOnlyRoute = ({ children }) => {
     const status = useSelector(selectAuthStatus);

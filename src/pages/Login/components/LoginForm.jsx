@@ -49,13 +49,17 @@ const LoginForm = () => {
 
     // Submit login credentials through the authentication thunk
     const onSubmit = async (data) => {
-        const result = await dispatch(
-            signIn({ email: data.email, password: data.password }),
-        );
+        try {
+            await dispatch(
+                signIn({
+                    email: data.email,
+                    password: data.password,
+                }),
+            ).unwrap();
 
-        // Navigate to the home page after a successful login
-        if (signIn.fulfilled.match(result)) {
             navigate(from, { replace: true });
+        } catch (error) {
+            console.error(error);
         }
     };
 

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 
 import { ShoppingBag, XIcon } from "lucide-react";
-import { useSelector } from "react-redux";
 import { useLocation } from "react-router";
 
 import { Button } from "@/components/ui/button";
@@ -14,8 +13,8 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
-import { selectGuestCartItems } from "@/features/cart/cartSelectors";
 import { useCartLines } from "@/hooks/useCartLines";
+import { useCart } from "@/hooks/useCart";
 import { formatPersianNumber } from "@/utils/formatter";
 
 import CartItem from "./CartItem";
@@ -27,9 +26,9 @@ const CartDrawer = () => {
     const [open, setOpen] = useState(false);
     const { pathname } = useLocation();
 
-    const guestCartItems = useSelector(selectGuestCartItems);
-    const { lines, isLoading, subTotal, itemCount } =
-        useCartLines(guestCartItems);
+    const { items, isLoading } = useCart();
+
+    const { lines, subTotal, itemCount } = useCartLines(items);
 
     // Close the drawer whenever the route changes
     useEffect(() => {

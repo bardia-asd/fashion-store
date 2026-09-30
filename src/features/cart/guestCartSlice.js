@@ -55,10 +55,12 @@ const guestCartSlice = createSlice({
             item.quantity = quantity;
         },
 
-        clearGuestCard: (state) => (state.items = []),
+        clearGuestCart: (state) => {
+            state.items = [];
+        },
     },
 });
 
-export const { addItem, removeItem, updateQuantity, clearGuestCard } =
+export const { addItem, removeItem, updateQuantity, clearGuestCart } =
     guestCartSlice.actions;
 export default guestCartSlice.reducer;

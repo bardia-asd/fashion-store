@@ -93,7 +93,10 @@ const CartDrawer = () => {
 
                 {/* Cart totals and checkout action */}
                 <SheetFooter className="border-t gap-4">
-                    <CartSummary subTotal={subTotal} />
+                    <CartSummary
+                        subTotal={subTotal}
+                        cartItemCount={lines.length}
+                    />
                 </SheetFooter>
             </SheetContent>
         </Sheet>

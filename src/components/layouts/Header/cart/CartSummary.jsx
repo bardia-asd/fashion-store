@@ -1,44 +1,138 @@
-import { Check } from "lucide-react";
+import { useState } from "react";
+import { Check, Info } from "lucide-react";
 import PropTypes from "prop-types";
 import { Link } from "react-router";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import {
+    InputGroup,
+    InputGroupAddon,
+    InputGroupButton,
+    InputGroupInput,
+} from "@/components/ui/input-group";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover";
+
 import { formatPersianNumber } from "@/utils/formatter";
+import { usePromoCode } from "@/hooks/usePromoCode";
 
 const SHIPPING_COST = 150000;
-const DISCOUNT_PERCENT = 10;
 
-const CartSummary = ({ subTotal }) => {
-    const discountAmount = (subTotal * DISCOUNT_PERCENT) / 100;
-    const total = subTotal - discountAmount + SHIPPING_COST;
+const promoCodes = [
+    { code: "WELCOME15", discount: "۱۵٪" },
+    { code: "DBY20", discount: "۲۰٪" },
+    { code: "SUMMER25", discount: "۲۵٪" },
+    { code: "NEWUSER10", discount: "۱۰٪" },
+    { code: "FASHION15", discount: "۱۵٪" },
+];
+
+const CartSummary = ({ subTotal, cartItemCount }) => {
+    const [code, setCode] = useState("");
+    const {
+        promoCode,
+        discount,
+        error,
+        isApplying,
+        applyPromoCode,
+        removePromoCode,
+    } = usePromoCode(subTotal);
+
+    const total = subTotal - discount + SHIPPING_COST;
 
     // Prevent the coupon form from submitting and reloading the page
-    const handleApplyCoupon = (e) => {
+    const handleApplyCoupon = async (e) => {
         e.preventDefault();
+
+        await applyPromoCode(code);
+    };
+
+    const handleRemoveCoupon = async () => {
+        await removePromoCode();
+        setCode("");
     };
 
     return (
         <>
             {/* Coupon input and discount status */}
             <div>
-                <form onSubmit={handleApplyCoupon} className="flex gap-2 mb-4">
-                    <Input
-                        name="coupon"
-                        placeholder="کد تخفیف"
-                        aria-label="کد تخفیف"
+                <form onSubmit={handleApplyCoupon} className="flex gap-2">
+                    <InputGroup className="rounded-full h-8.5">
+                        <Popover>
+                            <PopoverTrigger
+                                nativeButton={false}
+                                render={
+                                    <InputGroupAddon>
+                                        <InputGroupButton>
+                                            <Info />
+                                        </InputGroupButton>
+                                    </InputGroupAddon>
+                                }
+                            />
+
+                            <PopoverContent align="start" side="top">
+                                <div className="space-y-3">
+                                    <p className="text-sm" dir="rtl">
+                                        کدهای تخفیف:{" "}
+                                        {promoCodes.map((promo, index) => (
+                                            <span key={promo.code}>
+                                                {promo.code}
+                                                {index <
+                                                    promoCodes.length - 1 &&
+                                                    "، "}
+                                            </span>
+                                        ))}
+                                    </p>
+                                </div>
+                            </PopoverContent>
+                        </Popover>
+
+                        <InputGroupInput
+                            name="coupon"
+                            placeholder="کد تخفیف"
+                            aria-label="کد تخفیف"
+                            className="pr-0"
+                            value={code}
+                            onChange={(e) => setCode(e.target.value)}
+                            disabled={isApplying}
+                        />
+                    </InputGroup>
+                    {/* <Input
+                        
+                    /> */}
+                    <Button
+                        type="submit"
                         className="rounded-full h-8.5"
-                    />
-                    <Button type="submit" className="rounded-full h-8.5">
-                        اعمال
+                        disabled={!code.trim() || isApplying}>
+                        {isApplying ? "در حال بررسی..." : "اعمال"}
                     </Button>
                 </form>
 
                 {/* Display applied coupon discount */}
-                <span className="inline-flex items-center gap-1 text-success text-xs">
-                    <Check size={12} />
-                    {formatPersianNumber(DISCOUNT_PERCENT)}% تخفیف اعمال شد
-                </span>
+                {promoCode && (
+                    <div className="flex items-center justify-between">
+                        <span className="inline-flex items-center gap-1 text-success text-xs">
+                            <Check size={12} />
+                            {formatPersianNumber(promoCode.discount_percent)}٪
+                            تخفیف اعمال شد
+                        </span>
+
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={handleRemoveCoupon}
+                            disabled={isApplying}
+                            className="text-xs text-muted-foreground">
+                            حذف
+                        </Button>
+                    </div>
+                )}
+
+                {error && (
+                    <p className="mt-2 text-xs text-destructive">{error}</p>
+                )}
             </div>
 
             {/* Cart price breakdown */}
@@ -49,10 +143,12 @@ const CartSummary = ({ subTotal }) => {
                 </div>
 
                 {/* Applied discount amount */}
-                <div className="flex items-center justify-between text-sm text-success">
-                    <span>تخفیف</span>
-                    <span>{formatPersianNumber(discountAmount)}</span>
-                </div>
+                {promoCode && (
+                    <div className="flex items-center justify-between text-sm text-success">
+                        <span>تخفیف</span>
+                        <span>{formatPersianNumber(discount)}</span>
+                    </div>
+                )}
 
                 {/* Shipping cost */}
                 <div className="flex items-center justify-between text-sm text-muted-foreground">
@@ -76,6 +172,7 @@ const CartSummary = ({ subTotal }) => {
                 {/* Navigate to checkout */}
                 <Button
                     className="w-full h-13 rounded-2xl"
+                    disabled={cartItemCount === 0}
                     nativeButton={false}
                     render={<Link to="/checkout">تسویه حساب</Link>}
                 />

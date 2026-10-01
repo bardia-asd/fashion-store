@@ -38,6 +38,10 @@ export const cartApi = supabaseApi.injectEndpoints({
                         value: cartId,
                     },
                 ],
+                order: {
+                    column: "position",
+                    ascending: true,
+                },
             }),
             providesTags: ["Cart"],
         }),
@@ -82,6 +86,59 @@ export const cartApi = supabaseApi.injectEndpoints({
             }),
             invalidatesTags: ["Cart"],
         }),
+
+        getPromoCode: builder.query({
+            query: (code) => ({
+                table: "promo_codes",
+                method: "select",
+                query: "*",
+                filters: [
+                    {
+                        column: "code",
+                        operator: "eq",
+                        value: code.toUpperCase(),
+                    },
+                    {
+                        column: "is_active",
+                        operator: "eq",
+                        value: true,
+                    },
+                ],
+                single: true,
+            }),
+        }),
+
+        getCartPromoCode: builder.query({
+            query: (cartId) => ({
+                table: "carts",
+                method: "select",
+                query: "promo_code",
+                filters: [
+                    {
+                        column: "id",
+                        operator: "eq",
+                        value: cartId,
+                    },
+                ],
+                single: true,
+            }),
+            providesTags: ["Cart"],
+        }),
+
+        setCartPromoCode: builder.mutation({
+            query: ({ cartId, promoCode }) => ({
+                table: "carts",
+                method: "update",
+                match: {
+                    id: cartId,
+                },
+                values: {
+                    promo_code: promoCode,
+                },
+                single: true,
+            }),
+            invalidatesTags: ["Cart"],
+        }),
     }),
 });
 
@@ -91,4 +148,7 @@ export const {
     useAddServerItemMutation,
     useSetServerQuantityMutation,
     useRemoveServerItemMutation,
+    useLazyGetPromoCodeQuery,
+    useGetCartPromoCodeQuery,
+    useSetCartPromoCodeMutation,
 } = cartApi;

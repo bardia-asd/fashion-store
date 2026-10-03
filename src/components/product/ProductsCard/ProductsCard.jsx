@@ -22,15 +22,6 @@ const ProductsCard = ({ product }) => {
                 index === self.findIndex((item) => item.id === color.id),
         );
 
-    // Calculate the total number of reviews
-    const reviewCount = product.reviews?.length;
-
-    // Calculate the average product rating
-    const rating =
-        reviewCount > 0
-            ? product.reviews.reduce((sum, review) => sum + review.rating, 0)
-            : 0;
-
     return (
         // Product card linking to the product details page
         <article className="group h-full">
@@ -94,7 +85,7 @@ const ProductsCard = ({ product }) => {
                     {/* Rating and available colors */}
                     <div className="mt-auto pt-1.5">
                         {/* Display five stars based on the average rating */}
-                        <RatingStars rating={rating} />
+                        <RatingStars rating={product.avg_rating} />
 
                         {/* Display the unique available product colors */}
                         <div className="mt-2 flex flex-wrap gap-1.5">
@@ -122,12 +113,15 @@ ProductsCard.propTypes = {
         price: PropTypes.number.isRequired,
         old_price: PropTypes.number,
         tag: PropTypes.string,
+        avg_rating: PropTypes.number.isRequired,
+
         product_images: PropTypes.arrayOf(
             PropTypes.shape({
                 url: PropTypes.string.isRequired,
                 is_thumbnail: PropTypes.bool.isRequired,
             }),
         ).isRequired,
+
         product_variants: PropTypes.arrayOf(
             PropTypes.shape({
                 color: PropTypes.shape({
@@ -139,14 +133,10 @@ ProductsCard.propTypes = {
                 }),
             }),
         ).isRequired,
+
         brand: PropTypes.shape({
             name_fa: PropTypes.string.isRequired,
         }).isRequired,
-        reviews: PropTypes.arrayOf(
-            PropTypes.shape({
-                rating: PropTypes.number.isRequired,
-            }),
-        ).isRequired,
     }).isRequired,
 };
 

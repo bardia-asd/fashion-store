@@ -1,6 +1,6 @@
 import { supabaseApi } from "@/services/supabase/supabaseApi";
 
-const PRODUCT_SELECT = `*, product_images(*), product_variants!inner(*, color:colors(*)), brand:brands!inner(*), category:categories!inner(*), reviews(*)`;
+const PRODUCT_SELECT = `*, product_images(*), product_variants!inner(*, color:colors(*)), brand:brands!inner(*), category:categories!inner(*)`;
 
 const SORT_MAP = {
     newest: { column: "created_at", ascending: false },

@@ -4,6 +4,7 @@ import { router } from "./router/routes";
 import { useDispatch } from "react-redux";
 import { initAuth, setSession } from "./features/auth/authSlice";
 import { supabase } from "./services/supabase/client";
+import { Toaster } from "./components/ui/toaster";
 
 const App = () => {
     // Get the Redux dispatch function
@@ -26,8 +27,11 @@ const App = () => {
     }, [dispatch]);
 
     return (
-        // Provide the application router
-        <RouterProvider router={router} />
+        <>
+            // Provide the application router
+            <RouterProvider router={router} />
+            <Toaster />
+        </>
     );
 };
 

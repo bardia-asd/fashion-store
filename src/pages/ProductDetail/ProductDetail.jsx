@@ -83,7 +83,7 @@ const ProductDetail = () => {
             />
 
             {/* Customer reviews */}
-            <ProductReviewSection reviews={product.reviews} />
+            <ProductReviewSection productId={product.id} />
 
             {/* Related product recommendations */}
             <RelatedProducts

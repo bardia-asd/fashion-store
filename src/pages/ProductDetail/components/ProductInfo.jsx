@@ -22,7 +22,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Toggle } from "@/components/ui/toggle";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { addItem } from "@/features/cart/guestCartSlice";
 import { useQuantityCounter } from "@/hooks/useQuantityCounter";
 import { useCartActions } from "@/hooks/useCartActions";
 import { formatPersianNumber } from "@/utils/formatter";
@@ -93,16 +92,6 @@ const ProductInfo = ({ product }) => {
 
             return aIsNumber ? -1 : 1;
         });
-
-    // Calculate the total number of reviews
-    const reviewCount = product.reviews.length;
-
-    // Calculate the average product rating
-    const rating =
-        reviewCount > 0
-            ? product.reviews.reduce((sum, review) => sum + review.rating, 0) /
-              reviewCount
-            : 0;
 
     // Calculate the discount percentage
     const discount =
@@ -186,7 +175,8 @@ const ProductInfo = ({ product }) => {
                     {/* Display five stars based on the average rating */}
                     <div className="flex items-center gap-1">
                         {[1, 2, 3, 4, 5].map((star) => {
-                            const isFilled = star <= Math.round(rating);
+                            const isFilled =
+                                star <= Math.round(product.avg_rating);
 
                             return (
                                 <Star
@@ -205,8 +195,8 @@ const ProductInfo = ({ product }) => {
 
                     {/* Display the number of reviews */}
                     <span className="text-xs text-muted-foreground">
-                        {reviewCount > 0
-                            ? `${formatPersianNumber(reviewCount)} نظر`
+                        {product.review_count > 0
+                            ? `${formatPersianNumber(product.review_count)} نظر`
                             : "بدون نظر"}
                     </span>
                 </div>
@@ -418,27 +408,49 @@ const ProductInfo = ({ product }) => {
 
 ProductInfo.propTypes = {
     product: PropTypes.shape({
+        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+            .isRequired,
+
         brand: PropTypes.shape({
             name_fa: PropTypes.string.isRequired,
         }).isRequired,
 
         name_fa: PropTypes.string.isRequired,
+
         name_en: PropTypes.string.isRequired,
 
         price: PropTypes.number.isRequired,
+
         old_price: PropTypes.number,
+
+        avg_rating: PropTypes.number.isRequired,
+
+        review_count: PropTypes.number.isRequired,
 
         product_variants: PropTypes.arrayOf(
             PropTypes.shape({
+                id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+                    .isRequired,
+
+                color_id: PropTypes.oneOfType([
+                    PropTypes.string,
+                    PropTypes.number,
+                ]).isRequired,
+
                 color: PropTypes.shape({
                     id: PropTypes.oneOfType([
                         PropTypes.string,
                         PropTypes.number,
                     ]).isRequired,
+
                     name_fa: PropTypes.string.isRequired,
+
                     hex_code: PropTypes.string.isRequired,
-                }),
+                }).isRequired,
+
                 size: PropTypes.string,
+
+                stock: PropTypes.number.isRequired,
             }),
         ).isRequired,
 

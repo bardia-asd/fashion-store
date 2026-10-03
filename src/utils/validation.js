@@ -34,3 +34,13 @@ export const registerSchema = z
         message: "رمز عبور و تکرار آن مطابقت ندارند",
         path: ["confirmPassword"],
     });
+
+export const reviewSchema = z.object({
+    rating: z.number().min(1, "لطفاً امتیاز خود را انتخاب کنید").max(5),
+    comment: z
+        .string()
+        .trim()
+        .min(10, "متن دیدگاه باید حداقل ۱۰ کاراکتر باشد")
+        .max(1000, "متن دیدگاه نباید بیشتر از ۱۰۰۰ کاراکتر باشد"),
+    anonymous: z.boolean(),
+});

@@ -1,16 +1,7 @@
 import { useState } from "react";
 
-import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
-import {
-    Heart,
-    Minus,
-    Plus,
-    RotateCcw,
-    Shield,
-    Star,
-    Truck,
-} from "lucide-react";
+import { Minus, Plus, RotateCcw, Shield, Star, Truck } from "lucide-react";
 
 import {
     Accordion,
@@ -20,12 +11,13 @@ import {
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Toggle } from "@/components/ui/toggle";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useQuantityCounter } from "@/hooks/useQuantityCounter";
 import { useCartActions } from "@/hooks/useCartActions";
 import { formatPersianNumber } from "@/utils/formatter";
 import { cn } from "cn";
+
+import WishlistToggle from "./WishlistToggle";
 
 const productInfo = [
     {
@@ -59,7 +51,6 @@ const SIZE_ORDER = {
 };
 
 const ProductInfo = ({ product }) => {
-    const dispatch = useDispatch();
     const { addCartItem } = useCartActions();
 
     // Get unique colors from the product variants
@@ -356,11 +347,7 @@ const ProductInfo = ({ product }) => {
                 </Button>
 
                 {/* Toggle product wishlist */}
-                <Toggle
-                    variant="outline"
-                    className="group h-13 w-14 data-pressed:bg-transparent rounded-xl">
-                    <Heart className="transition-colors group-data-pressed:fill-red-600 group-data-pressed:text-red-600" />
-                </Toggle>
+                <WishlistToggle productId={product.id} />
             </div>
 
             {/* Shipping, returns, and authenticity information */}

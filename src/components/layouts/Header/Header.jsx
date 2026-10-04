@@ -84,9 +84,14 @@ const Header = () => {
                             variant="ghost"
                             size="icon"
                             aria-label="علاقه‌مندی‌ها"
-                            className="hidden md:inline-flex size-8.5 [&_svg:not([class*='size-'])]:size-4.5">
-                            <Heart />
-                        </Button>
+                            className="hidden md:inline-flex size-8.5 [&_svg:not([class*='size-'])]:size-4.5"
+                            nativeButton={false}
+                            render={
+                                <Link to="/wishlist">
+                                    <Heart />
+                                </Link>
+                            }
+                        />
 
                         {/* Shopping cart*/}
                         <CartDrawer />

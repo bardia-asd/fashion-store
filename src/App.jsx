@@ -28,7 +28,7 @@ const App = () => {
 
     return (
         <>
-            // Provide the application router
+            {/* Provide the application router */}
             <RouterProvider router={router} />
             <Toaster />
         </>

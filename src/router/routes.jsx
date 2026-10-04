@@ -14,6 +14,7 @@ import {
     Profile,
     Register,
     Search,
+    Wishlist,
 } from "@/pages";
 
 export const router = createBrowserRouter([
@@ -25,6 +26,14 @@ export const router = createBrowserRouter([
             { path: "products", element: <Products /> },
             { path: "products/:productSlug", element: <ProductDetail /> },
             { path: "search", element: <Search /> },
+            {
+                path: "wishlist",
+                element: (
+                    <ProtectedRoute>
+                        <Wishlist />
+                    </ProtectedRoute>
+                ),
+            },
             {
                 path: "checkout",
                 element: (

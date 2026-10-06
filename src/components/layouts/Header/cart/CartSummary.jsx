@@ -174,7 +174,7 @@ const CartSummary = ({ subTotal, cartItemCount }) => {
                     className="w-full h-13 rounded-2xl"
                     disabled={cartItemCount === 0}
                     nativeButton={false}
-                    render={<Link to="/checkout">تسویه حساب</Link>}
+                    render={<Link to="/checkout/shipping">تسویه حساب</Link>}
                 />
             </div>
         </>

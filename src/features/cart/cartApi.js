@@ -139,6 +139,14 @@ export const cartApi = supabaseApi.injectEndpoints({
             }),
             invalidatesTags: ["Cart"],
         }),
+
+        clearCart: builder.mutation({
+            query: (cartId) => ({
+                table: "carts",
+                method: "delete",
+                match: { id: cartId },
+            }),
+        }),
     }),
 });
 

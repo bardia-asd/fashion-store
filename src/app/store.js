@@ -2,11 +2,13 @@ import { configureStore } from "@reduxjs/toolkit";
 import { supabaseApi } from "@/services/supabase/supabaseApi";
 import authReducer from "@/features/auth/authSlice";
 import guestCartReducer, { STORAGE_KEY } from "@/features/cart/guestCartSlice";
+import checkoutReducer from "@/features/checkout/checkoutSlice";
 
 export const store = configureStore({
     reducer: {
         auth: authReducer,
         guestCart: guestCartReducer,
+        checkout: checkoutReducer,
         [supabaseApi.reducerPath]: supabaseApi.reducer,
     },
     middleware: (getDefault) => getDefault().concat(supabaseApi.middleware),

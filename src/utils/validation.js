@@ -44,3 +44,30 @@ export const reviewSchema = z.object({
         .max(1000, "متن دیدگاه نباید بیشتر از ۱۰۰۰ کاراکتر باشد"),
     anonymous: z.boolean(),
 });
+
+export const shippingSchema = z.object({
+    firstName: z.string().trim().min(2, "نام باید حداقل ۲ کاراکتر باشد."),
+
+    lastName: z
+        .string()
+        .trim()
+        .min(2, "نام خانوادگی باید حداقل ۲ کاراکتر باشد."),
+
+    phone: z
+        .string()
+        .trim()
+        .regex(/^09\d{9}$/, "شماره موبایل معتبر نیست."),
+
+    address: z.string().trim().min(10, "آدرس باید حداقل ۱۰ کاراکتر باشد."),
+
+    plaque: z.string().trim().min(1, "پلاک را وارد کنید."),
+
+    unit: z.string().trim().optional(),
+
+    postalCode: z
+        .string()
+        .trim()
+        .regex(/^\d{10}$/, "کد پستی باید ۱۰ رقم باشد."),
+
+    recipientNote: z.string().trim().optional(),
+});

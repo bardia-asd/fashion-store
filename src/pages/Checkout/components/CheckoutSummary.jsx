@@ -1,4 +1,5 @@
-import BrandLoader from "@/components/common/BrandLoader";
+import { useSelector } from "react-redux";
+
 import {
     Card,
     CardContent,
@@ -7,6 +8,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { selectDeliveryMethod } from "@/features/checkout/checkoutSelectors";
 import { useCart } from "@/hooks/useCart";
 import { useCartLines } from "@/hooks/useCartLines";
 import { formatPersianNumber } from "@/utils/formatter";
@@ -19,6 +21,10 @@ const CheckoutSummary = () => {
 
     // Get cart lines with product details and calculate the subtotal
     const { lines, subTotal } = useCartLines(items);
+
+    const deliveryMethod = useSelector(selectDeliveryMethod);
+
+    const shippingCost = deliveryMethod === "standard" ? 50_000 : 90_000;
 
     // Calculate the final order total including shipping
     const total = subTotal + shippingCost;

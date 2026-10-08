@@ -142,10 +142,11 @@ export const cartApi = supabaseApi.injectEndpoints({
 
         clearCart: builder.mutation({
             query: (cartId) => ({
-                table: "carts",
+                table: "cart_items",
                 method: "delete",
-                match: { id: cartId },
+                match: { cart_id: cartId },
             }),
+            invalidatesTags: ["Cart"],
         }),
     }),
 });
@@ -159,4 +160,5 @@ export const {
     useLazyGetPromoCodeQuery,
     useGetCartPromoCodeQuery,
     useSetCartPromoCodeMutation,
+    useClearCartMutation,
 } = cartApi;

@@ -13,6 +13,9 @@ import {
     selectPaymentMethod,
     selectShippingAddress,
 } from "@/features/checkout/checkoutSelectors";
+import { useCartId } from "@/hooks/useCartId";
+import { useClearCartMutation } from "@/features/cart/cartApi";
+import { useOrder } from "@/hooks/useOrder";
 
 const ReviewStep = () => {
     // Get the checkout navigation helper
@@ -22,6 +25,25 @@ const ReviewStep = () => {
     const shippingAddress = useSelector(selectShippingAddress);
     const deliveryMethod = useSelector(selectDeliveryMethod);
     const paymentMethod = useSelector(selectPaymentMethod);
+
+    const { cartId } = useCartId();
+    const { createOrder, isLoading: isCreatingOrder } = useOrder();
+
+    const [clearCart, { isLoading: isClearingCart }] = useClearCartMutation();
+
+    const handleConfirmOrder = async () => {
+        try {
+            const order = await createOrder();
+
+            await clearCart(cartId).unwrap();
+
+            navigate(`/success-order/${order[0].id}`);
+        } catch (error) {
+            console.error("Checkout failed:", error);
+        }
+    };
+
+    const isSubmitting = isCreatingOrder || isClearingCart;
 
     return (
         // Final order review card
@@ -153,8 +175,12 @@ const ReviewStep = () => {
 
             <CardFooter className="flex items-center justify-end border-t bg-card pt-4">
                 {/* Confirm the order and proceed to payment */}
-                <Button size="lg" type="button">
-                    تایید و پرداخت
+                <Button
+                    size="lg"
+                    type="button"
+                    onClick={handleConfirmOrder}
+                    disabled={isSubmitting}>
+                    {isSubmitting ? "در حال پردازش..." : "تایید و پرداخت"}
                 </Button>
             </CardFooter>
         </Card>

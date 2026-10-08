@@ -10,6 +10,7 @@ import {
     DeliveryStep,
     Home,
     Login,
+    OrderSuccess,
     PaymentStep,
     ProductDetail,
     Products,
@@ -65,6 +66,15 @@ export const router = createBrowserRouter([
                 ),
             },
         ],
+    },
+
+    {
+        path: "success-order/:id",
+        element: (
+            <ProtectedRoute>
+                <OrderSuccess />
+            </ProtectedRoute>
+        ),
     },
 
     {

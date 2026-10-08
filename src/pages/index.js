@@ -11,3 +11,4 @@ export { default as ShippingStep } from "./Checkout/components/ShippingStep";
 export { default as DeliveryStep } from "./Checkout/components/DeliveryStep";
 export { default as PaymentStep } from "./Checkout/components/PaymentStep";
 export { default as ReviewStep } from "./Checkout/components/ReviewStep";
+export { default as OrderSuccess } from "./OrderSuccess";

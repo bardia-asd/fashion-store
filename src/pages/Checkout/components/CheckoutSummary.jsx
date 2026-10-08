@@ -13,8 +13,6 @@ import { useCart } from "@/hooks/useCart";
 import { useCartLines } from "@/hooks/useCartLines";
 import { formatPersianNumber } from "@/utils/formatter";
 
-const shippingCost = 150_000;
-
 const CheckoutSummary = () => {
     // Get the current cart items and loading state
     const { items, isLoading } = useCart();

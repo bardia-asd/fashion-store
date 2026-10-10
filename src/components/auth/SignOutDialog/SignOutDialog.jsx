@@ -10,11 +10,13 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
+    AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
 import { signOut } from "@/features/auth/authSlice";
+import { LogOut } from "lucide-react";
 
-const SignOutDialog = ({ open, onOpenChange }) => {
+const SignOutDialog = () => {
     // Get the Redux dispatch function and navigation helper
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -27,7 +29,12 @@ const SignOutDialog = ({ open, onOpenChange }) => {
 
     return (
         // Confirmation dialog for signing out
-        <AlertDialog open={open} onOpenChange={onOpenChange}>
+        <AlertDialog>
+            <AlertDialogTrigger className="flex w-full items-center gap-2.5 rounded-sm px-1.5 py-3 text-xs text-destructive transition-colors hover:bg-destructive/10 hover:text-destructive">
+                <LogOut size={18} />
+                خروج از حساب
+            </AlertDialogTrigger>
+
             <AlertDialogContent>
                 <AlertDialogHeader>
                     {/* Dialog title */}

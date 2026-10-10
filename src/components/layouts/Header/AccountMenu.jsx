@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router";
 import { useSelector } from "react-redux";
-import { ChevronDown, LogOut, User } from "lucide-react";
+import { ChevronDown, User } from "lucide-react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -26,7 +26,6 @@ const AccountMenu = () => {
     const status = useSelector(selectAuthStatus);
 
     const [menuOpen, setMenuOpen] = useState(false);
-    const [signOutOpen, setSignOutOpen] = useState(false);
     const location = useLocation();
 
     // Close the menu whenever the route changes
@@ -82,18 +81,11 @@ const AccountMenu = () => {
                         ))}
 
                         <div className="border-t pt-1">
-                            <button
-                                onClick={() => setSignOutOpen(true)}
-                                className="flex items-center gap-2.5 w-full px-1.5 py-2.5 rounded-sm hover:bg-muted text-xs text-muted-foreground hover:text-foreground transition-colors">
-                                <LogOut size={18} />
-                                خروج از حساب
-                            </button>
+                            <SignOutDialog />
                         </div>
                     </div>
                 </DropdownMenuContent>
             </DropdownMenu>
-
-            <SignOutDialog open={signOutOpen} onOpenChange={setSignOutOpen} />
         </>
     );
 };

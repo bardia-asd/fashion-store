@@ -15,6 +15,10 @@ import {
     ProductDetail,
     Products,
     Profile,
+    ProfileAddresses,
+    ProfileOrders,
+    ProfileOverview,
+    ProfileSettings,
     Register,
     ReviewStep,
     Search,
@@ -64,6 +68,12 @@ export const router = createBrowserRouter([
                         <Profile />
                     </ProtectedRoute>
                 ),
+                children: [
+                    { index: true, element: <ProfileOverview /> },
+                    { path: "orders", element: <ProfileOrders /> },
+                    { path: "addresses", element: <ProfileAddresses /> },
+                    { path: "settings", element: <ProfileSettings /> },
+                ],
             },
         ],
     },

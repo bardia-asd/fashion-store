@@ -71,3 +71,25 @@ export const shippingSchema = z.object({
 
     recipientNote: z.string().trim().optional(),
 });
+
+export const profileSchema = z.object({
+    name: z
+        .string()
+        .trim()
+        .min(2, "نام باید حداقل ۲ کاراکتر باشد")
+        .max(100, "نام نمی‌تواند بیشتر از ۱۰۰ کاراکتر باشد"),
+
+    email: z
+        .string()
+        .trim()
+        .min(1, "ایمیل الزامی است")
+        .email("ایمیل معتبر نیست"),
+
+    phone: z
+        .string()
+        .trim()
+        .refine(
+            (value) => value === "" || /^09\d{9}$/.test(value),
+            "شماره موبایل معتبر نیست",
+        ),
+});

@@ -52,6 +52,21 @@ export const initAuth = createAsyncThunk("auth/init", async () => {
     };
 });
 
+export const updateEmail = createAsyncThunk(
+    "auth/updateEmail",
+    async (email, { rejectWithValue }) => {
+        const { data, error } = await supabase.auth.updateUser({
+            email: email.trim(),
+        });
+
+        if (error) {
+            return rejectWithValue(error.message);
+        }
+
+        return data.user;
+    },
+);
+
 const initialState = {
     user: null,
     status: "idle",
@@ -123,6 +138,17 @@ const authSlice = createSlice({
                 state.status = action.payload.session
                     ? "authenticated"
                     : "unauthenticated";
+            })
+
+            // updateEmail
+            .addCase(updateEmail.pending, (state) => {
+                state.error = null;
+            })
+            .addCase(updateEmail.fulfilled, (state, action) => {
+                state.user = action.payload;
+            })
+            .addCase(updateEmail.rejected, (state, action) => {
+                state.error = action.payload;
             });
     },
 });

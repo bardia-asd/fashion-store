@@ -13,6 +13,7 @@ export const supabaseApi = createApi({
         "Cart",
         "Reviews",
         "Wishlist",
+        "Profile",
     ],
     endpoints: () => ({}),
 });

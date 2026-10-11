@@ -8,7 +8,6 @@ const Profile = () => {
     const user = useSelector(selectAuthUser);
 
     return (
-        // Main profile page container
         <div className="container-app my-8">
             {/* Profile welcome message and introduction */}
             <div>
@@ -28,12 +27,16 @@ const Profile = () => {
             </div>
 
             {/* Profile sidebar and nested account pages */}
-            <div className="grid grid-cols-3 gap-7 mt-11">
+            <div className="mt-7 grid grid-cols-1 gap-5 sm:mt-9 sm:gap-6 lg:mt-11 lg:grid-cols-3 lg:gap-7">
                 {/* Account navigation sidebar */}
-                <ProfileSidebar />
+                <div className="lg:col-span-1">
+                    <ProfileSidebar />
+                </div>
 
                 {/* Render the active nested profile route */}
-                <Outlet />
+                <div className="lg:col-span-2">
+                    <Outlet />
+                </div>
             </div>
         </div>
     );

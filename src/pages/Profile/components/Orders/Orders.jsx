@@ -28,7 +28,7 @@ const ProfileOrders = () => {
             <CardContent className="px-0">
                 {isLoading ? (
                     <BrandLoader size="sm" />
-                ) : orders.length > 0 ? (
+                ) : orders?.length > 0 ? (
                     <div className="flex flex-col gap-4">
                         {orders.map((order) => (
                             <OrderCard key={order.id} order={order} />

@@ -6,7 +6,18 @@ const ordersApi = supabaseApi.injectEndpoints({
             query: (userId) => ({
                 table: "orders",
                 method: "select",
-                query: `*,order_items (id,quantity,product:products (name_fa),variant:product_variants (size,color:colors (name_fa))`,
+                query: `
+                    *,
+                    order_items (
+                        id,
+                        quantity,
+                        product:products (name_fa),
+                        variant:product_variants (
+                        size,
+                        color:colors (name_fa)
+                        )
+                    )
+                `,
                 filters: [
                     {
                         column: "user_id",

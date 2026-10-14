@@ -62,8 +62,6 @@ export const shippingSchema = z.object({
 
     plaque: z.string().trim().min(1, "پلاک را وارد کنید."),
 
-    unit: z.string().trim().optional(),
-
     postalCode: z
         .string()
         .trim()

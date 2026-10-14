@@ -37,7 +37,7 @@ const ReviewStep = () => {
 
             await clearCart(cartId).unwrap();
 
-            navigate(`/success-order/${order[0].id}`);
+            navigate(`/success-order/DBY-${order[0].order_number}`);
         } catch (error) {
             console.error("Checkout failed:", error);
         }

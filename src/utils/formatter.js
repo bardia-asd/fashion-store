@@ -2,6 +2,18 @@ export const formatPersianNumber = (value) => {
     return new Intl.NumberFormat("fa-IR").format(value).replace("٫", ".");
 };
 
+export const formatPersianDate = (date) => {
+    if (!date || isNaN(new Date(date).getTime())) {
+        return "";
+    }
+
+    return new Intl.DateTimeFormat("fa-IR", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+    }).format(new Date(date));
+};
+
 export const toPlainNumber = (str) => {
     const persianToLatin = str.replace(/[۰-۹]/g, (d) =>
         "۰۱۲۳۴۵۶۷۸۹".indexOf(d),

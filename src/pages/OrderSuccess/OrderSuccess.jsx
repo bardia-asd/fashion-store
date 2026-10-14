@@ -52,7 +52,7 @@ const OrderSuccess = () => {
                                     </p>
 
                                     <p className="mt-1.5 font-mono text-sm font-medium text-primary">
-                                        #{id}
+                                        {id}
                                     </p>
                                 </div>
 
@@ -67,7 +67,7 @@ const OrderSuccess = () => {
                                     className="h-11 rounded-xl bg-primary px-6 hover:bg-primary/90"
                                     nativeButton={false}
                                     render={
-                                        <Link to={`/orders/${id}`}>
+                                        <Link to={`/profile/orders`}>
                                             <Package className="ml-2 size-4" />
                                             مشاهده سفارش
                                         </Link>

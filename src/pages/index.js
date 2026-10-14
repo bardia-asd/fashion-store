@@ -3,16 +3,20 @@ export { default as ProductDetail } from "./ProductDetail";
 export { default as Products } from "./Products";
 export { default as Search } from "./Search";
 export { default as Profile } from "./Profile";
-export { default as ProfileOverview } from "./Profile/Overview";
-export { default as ProfileOrders } from "./Profile/Orders";
-export { default as ProfileAddresses } from "./Profile/Addresses";
-export { default as ProfileSettings } from "./Profile/Settings";
+export {
+    ProfileOverview,
+    ProfileOrders,
+    ProfileAddresses,
+    ProfileSettings,
+} from "./Profile";
 export { default as Login } from "./Login";
 export { default as Register } from "./Register";
 export { default as Wishlist } from "./Wishlist";
 export { default as Checkout } from "./Checkout";
-export { default as ShippingStep } from "./Checkout/components/ShippingStep";
-export { default as DeliveryStep } from "./Checkout/components/DeliveryStep";
-export { default as PaymentStep } from "./Checkout/components/PaymentStep";
-export { default as ReviewStep } from "./Checkout/components/ReviewStep";
+export {
+    ShippingStep,
+    DeliveryStep,
+    PaymentStep,
+    ReviewStep,
+} from "./Checkout";
 export { default as OrderSuccess } from "./OrderSuccess";

@@ -2,6 +2,25 @@ import { supabaseApi } from "@/services/supabase/supabaseApi";
 
 const ordersApi = supabaseApi.injectEndpoints({
     endpoints: (builder) => ({
+        getOrders: builder.query({
+            query: (userId) => ({
+                table: "orders",
+                method: "select",
+                query: `*,order_items (id,quantity,product:products (name_fa),variant:product_variants (size,color:colors (name_fa))`,
+                filters: [
+                    {
+                        column: "user_id",
+                        operator: "eq",
+                        value: userId,
+                    },
+                ],
+                orderBy: {
+                    column: "created_at",
+                    ascending: false,
+                },
+            }),
+        }),
+
         createOrder: builder.mutation({
             query: (order) => ({
                 table: "orders",
@@ -22,5 +41,8 @@ const ordersApi = supabaseApi.injectEndpoints({
     }),
 });
 
-export const { useCreateOrderMutation, useCreateOrderItemsMutation } =
-    ordersApi;
+export const {
+    useGetOrdersQuery,
+    useCreateOrderMutation,
+    useCreateOrderItemsMutation,
+} = ordersApi;

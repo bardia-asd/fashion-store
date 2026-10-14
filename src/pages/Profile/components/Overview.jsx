@@ -13,6 +13,7 @@ import {
 import { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { profileSchema } from "@/utils/validation";
+import { toast } from "sonner";
 
 const ProfileOverview = () => {
     // Get the currently authenticated user from Redux
@@ -28,7 +29,7 @@ const ProfileOverview = () => {
         register,
         handleSubmit,
         reset,
-        formState: { errors },
+        formState: { errors, isDirty },
     } = useForm({
         resolver: zodResolver(profileSchema),
         defaultValues: {
@@ -56,21 +57,32 @@ const ProfileOverview = () => {
     const dispatch = useDispatch();
 
     // Save profile details and update the email if it has changed
+
     const onSubmit = async (values) => {
         try {
-            // Update the user's name and phone number in the profile table
+            // Update the user's name and phone number
             await updateProfile({
                 userId: user.id,
                 full_name: values.name,
                 phone: values.phone || null,
             }).unwrap();
 
-            // Update the authentication email only when it has changed
+            // Update the authentication email if it has changed
             if (values.email.trim() !== user.email) {
-                await dispatch(updateEmail(values.email.trim())).unwrap();
+                try {
+                    await dispatch(updateEmail(values.email.trim())).unwrap();
+                    toast.success("اطلاعات حساب با موفقیت به‌روزرسانی شد");
+                } catch (error) {
+                    toast.error(
+                        "اطلاعات پروفایل ذخیره شد، اما تغییر ایمیل انجام نشد",
+                    );
+                    return;
+                }
+            } else {
+                toast.success("اطلاعات حساب با موفقیت به‌روزرسانی شد");
             }
         } catch (error) {
-            // Log errors that occur while saving profile changes
+            toast.error("ذخیره اطلاعات حساب انجام نشد");
             console.error(error);
         }
     };
@@ -145,7 +157,10 @@ const ProfileOverview = () => {
 
                     {/* Submit button and update status */}
                     <div className="flex justify-start border-t pt-5">
-                        <Button size="lg" type="submit" disabled={isLoading}>
+                        <Button
+                            size="lg"
+                            type="submit"
+                            disabled={!isDirty || isLoading}>
                             {isLoading
                                 ? "در حال بروزرسانی..."
                                 : "ذخیره تغییرات"}
